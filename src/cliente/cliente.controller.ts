@@ -1,30 +1,18 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
-import { ClientesService } from './cliente.service';
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import { ClienteService } from './cliente.service';
+import { Cliente } from './cliente.model';
 
 @Controller('clientes')
-export class ClientesController {
-  constructor(private readonly clienteService: ClientesService) {}
+export class ClienteController {
+  constructor(private readonly clienteService: ClienteService) {}
+
+  @Get()
+  listarClientes(): Cliente[] {
+    return this.clienteService.listarClientes();
+  }
 
   @Post('cadastrar')
-  abrirConta(
-    @Body()
-    body: {
-      nomeCompleto: string;
-      endereco: string;
-      telefone: string;
-      rendaSalarial: number;
-    },
-  ) {
-    const cliente = this.clienteService.cadastrarCliente(
-      body.nomeCompleto,
-      body.endereco,
-      body.telefone,
-      body.rendaSalarial,
-    );
-    return {
-      statusCode: HttpStatus.CREATED,
-      message: 'Cliente cadastrado com sucesso',
-      data: cliente,
-    };
+  cadastrarCliente(@Body() cliente: Cliente): void {
+    this.clienteService.cadastrarCliente(cliente);
   }
 }

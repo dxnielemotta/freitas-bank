@@ -1,25 +1,29 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export class Cliente {
-  nomeCompleto: string;
-  id: string;
-  endereco: string;
-  telefone: string;
-  rendaSalarial: number;
-  contas: Conta[];
-  gerente: Gerente;
+  public nomeCompleto: string;
+  public id: string;
+  public endereco: string;
+  public telefone: string;
+  public rendaSalarial: number;
+  public contas: Conta[];
+  public gerente: Gerente;
 
-  constructor(
-    nomeCompleto: string,
-    endereco: string,
-    telefone: string,
-    rendaSalarial: number,
-  ) {
-    this.nomeCompleto = nomeCompleto;
-    this.id = uuidv4();
-    this.endereco = endereco;
-    this.telefone = telefone;
-    this.rendaSalarial = rendaSalarial;
-    this.contas = [];
+  abrirConta(conta: Conta): void {
+    this.contas.push(conta);
+  }
+  fecharConta(conta: Conta): void {
+    this.contas = this.contas.filter((item) => item.id !== conta.id);
+  }
+
+  mudarTipoConta(conta: Conta, novoTipo: string): void {
+    let contaEncontrada = this.contas.find((item) => item.id === conta.id);
+
+    if (!contaEncontrada) {
+      console.log('Conta não encontrada');
+      return;
+    }
+
+    contaEncontrada.tipo = novoTipo;
   }
 }
