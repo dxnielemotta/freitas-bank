@@ -8,9 +8,6 @@ export abstract class Conta {
     public clienteID: string,
     public tipo: TipoConta,
   ) {
-    // this.saldo = saldo;
-    // this.clienteID = clienteID;
-    // this.tipo = tipo;
     this.id = uuidv4();
   }
 
