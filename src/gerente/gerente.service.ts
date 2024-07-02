@@ -9,8 +9,8 @@ export class GerenteService {
 
   constructor(private readonly clienteService: ClienteService) {}
 
-  criarGerente(nome: string): Gerente {
-    const gerente = new Gerente(nome);
+  criarGerente(nomeCompleto: string): Gerente {
+    const gerente = new Gerente(nomeCompleto);
     this.gerentes.push(gerente);
     return gerente;
   }

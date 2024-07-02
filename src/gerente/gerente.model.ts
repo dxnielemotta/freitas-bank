@@ -7,17 +7,11 @@ export class Gerente {
   id: string;
   clientes: Cliente[] = [];
 
-  constructor(nome: string) {
+  constructor(public nomeCompleto: string) {
     this.id = uuidv4();
   }
 
   adicionarCliente(cliente: Cliente): void {
-    // const novoCliente = new Cliente(
-    //   cliente.nomeCompleto,
-    //   cliente.endereco,
-    //   cliente.telefone,
-    //   cliente.rendaSalarial,
-    // );
     this.clientes.push(cliente);
   }
 
