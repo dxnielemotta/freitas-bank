@@ -6,6 +6,8 @@ import {
   Param,
   Put,
   Delete,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { ClienteService } from './cliente.service';
 import { Cliente } from './cliente.model';
@@ -22,7 +24,11 @@ export class ClienteController {
 
   @Get(':id')
   obterCliente(@Param('id') id: string): Cliente {
-    return this.clienteService.obterCliente(id);
+    const cliente = this.clienteService.obterCliente(id);
+    if (!cliente) {
+      throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
+    }
+    return cliente;
   }
 
   @Post('cadastrar')
@@ -33,13 +39,20 @@ export class ClienteController {
     @Body('rendaSalarial') rendaSalarial: number,
     @Body('gerenteID') gerenteID: string,
   ): Cliente {
-    return this.clienteService.cadastrarCliente(
+    const cliente = this.clienteService.cadastrarCliente(
       nomeCompleto,
       endereco,
       telefone,
       rendaSalarial,
       gerenteID,
     );
+    if (!cliente) {
+      throw new HttpException(
+        'Falha ao cadastrar cliente',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return cliente;
   }
 
   @Put(':id/mudar')
@@ -49,10 +62,18 @@ export class ClienteController {
     @Body('novoTipo') novoTipo: TipoConta,
   ): void {
     const cliente = this.clienteService.obterCliente(id);
+    if (!cliente) {
+      throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
+    }
+
     const conta = cliente.contas.find((c) => c.id === contaID);
     if (!conta) {
-      throw new Error('Conta não encontrada para o cliente.');
+      throw new HttpException(
+        'Conta não encontrada para o cliente',
+        HttpStatus.NOT_FOUND,
+      );
     }
+
     cliente.mudarTipoConta(conta, novoTipo);
   }
 
@@ -62,10 +83,18 @@ export class ClienteController {
     @Param('contaID') contaID: string,
   ): void {
     const cliente = this.clienteService.obterCliente(id);
+    if (!cliente) {
+      throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
+    }
+
     const conta = cliente.contas.find((c) => c.id === contaID);
     if (!conta) {
-      throw new Error('Conta não encontrada para o cliente.');
+      throw new HttpException(
+        'Conta não encontrada para o cliente',
+        HttpStatus.NOT_FOUND,
+      );
     }
+
     cliente.fecharConta(conta);
   }
 }

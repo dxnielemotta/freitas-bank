@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { GerenteService } from './gerente.service';
 import { TipoConta } from 'src/enums/tipo-conta.enum';
 
@@ -36,15 +45,26 @@ export class GerenteController {
     @Body('novoTipo') novoTipo: TipoConta,
   ): void {
     const gerente = this.gerenteService.obterGerente(id);
-    const cliente = gerente.clientes.find((c) => c.id === clienteID);
-
-    if (!cliente) {
-      throw new Error('Cliente não encontrado para o gerente.');
+    if (!gerente) {
+      throw new HttpException('Gerente não encontrado', HttpStatus.NOT_FOUND);
     }
+
+    const cliente = gerente.clientes.find((c) => c.id === clienteID);
+    if (!cliente) {
+      throw new HttpException(
+        'Cliente não encontrado para o gerente',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     const conta = cliente.contas.find((c) => c.id === contaID);
     if (!conta) {
-      throw new Error('Conta não encontrada para o cliente.');
+      throw new HttpException(
+        'Conta não encontrada para o cliente',
+        HttpStatus.NOT_FOUND,
+      );
     }
+
     gerente.mudarTipoConta(cliente, conta, novoTipo);
   }
 
@@ -55,14 +75,26 @@ export class GerenteController {
     @Param('contaID') contaID: string,
   ): void {
     const gerente = this.gerenteService.obterGerente(id);
+    if (!gerente) {
+      throw new HttpException('Gerente não encontrado', HttpStatus.NOT_FOUND);
+    }
+
     const cliente = gerente.clientes.find((c) => c.id === clienteID);
     if (!cliente) {
-      throw new Error('Cliente não encontrado para o gerente.');
+      throw new HttpException(
+        'Cliente não encontrado para o gerente',
+        HttpStatus.NOT_FOUND,
+      );
     }
+
     const conta = cliente.contas.find((c) => c.id === contaID);
     if (!conta) {
-      throw new Error('Conta não encontrada para o cliente.');
+      throw new HttpException(
+        'Conta não encontrada para o cliente',
+        HttpStatus.NOT_FOUND,
+      );
     }
+
     gerente.fecharConta(cliente, conta);
   }
 }
