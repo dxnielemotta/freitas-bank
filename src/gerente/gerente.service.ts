@@ -1,8 +1,8 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { Gerente } from './gerente.model';
 import { ClienteService } from '../cliente/cliente.service';
-import { TipoConta } from 'src/enums/tipo-conta.enum';
 import { Cliente } from 'src/cliente/cliente.model';
+import { TipoConta } from 'src/conta/conta.model';
 
 @Injectable()
 export class GerenteService {

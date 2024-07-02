@@ -10,7 +10,7 @@ import {
   Get,
 } from '@nestjs/common';
 import { GerenteService } from './gerente.service';
-import { TipoConta } from 'src/enums/tipo-conta.enum';
+import { TipoConta } from 'src/conta/conta.model';
 
 @Controller('gerentes')
 export class GerenteController {

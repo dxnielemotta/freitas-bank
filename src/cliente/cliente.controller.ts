@@ -1,122 +1,36 @@
 import {
   Controller,
-  Get,
-  Post,
-  Body,
   Param,
-  Put,
-  Delete,
+  Post,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { ClienteService } from './cliente.service';
-import { TipoConta } from 'src/enums/tipo-conta.enum';
+import { ContaService } from './conta.service';
 
-@Controller('clientes')
-export class ClienteController {
-  constructor(private readonly clienteService: ClienteService) {}
+@Controller('conta')
+export class ContaController {
+  constructor(private readonly contaService: ContaService) {}
 
-  @Get()
-  listarClientes() {
-    const clientes = this.clienteService.listarClientes();
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Clientes retornados com sucesso',
-      data: clientes,
-    };
-  }
-
-  @Get(':id')
-  obterCliente(@Param('id') id: string) {
+  @Post(':clienteID/corrente')
+  criarContaCorrente(@Param('clienteID') clienteID: string) {
     try {
-      const cliente = this.clienteService.obterCliente(id);
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Cliente retornado com sucesso',
-        data: cliente,
-      };
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
-    }
-  }
-
-  @Post('cadastrar')
-  cadastrarCliente(
-    @Body('nomeCompleto') nomeCompleto: string,
-    @Body('endereco') endereco: string,
-    @Body('telefone') telefone: string,
-    @Body('rendaSalarial') rendaSalarial: number,
-    @Body('gerenteID') gerenteID: string,
-  ) {
-    try {
-      const cliente = this.clienteService.cadastrarCliente(
-        nomeCompleto,
-        endereco,
-        telefone,
-        rendaSalarial,
-        gerenteID,
-      );
+      this.contaService.criarContaCorrente(clienteID);
       return {
         statusCode: HttpStatus.CREATED,
-        message: 'Cliente cadastrado com sucesso',
-        data: cliente,
+        message: 'Conta corrente criada com sucesso',
       };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  @Put(':id/mudar')
-  mudarTipoConta(
-    @Param('id') id: string,
-    @Body('contaID') contaID: string,
-    @Body('novoTipo') novoTipo: TipoConta,
-  ) {
+  @Post(':clienteID/poupanca')
+  criarContaPoupanca(@Param('clienteID') clienteID: string) {
     try {
-      const cliente = this.clienteService.obterCliente(id);
-      if (!cliente) {
-        throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
-      }
-
-      const conta = cliente.contas.find((c) => c.id === contaID);
-      if (!conta) {
-        throw new HttpException(
-          'Conta não encontrada para o cliente',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      cliente.mudarTipoConta(conta, novoTipo);
-
+      this.contaService.criarContaPoupanca(clienteID);
       return {
-        statusCode: HttpStatus.OK,
-        message: 'Mudança de conta feita com sucesso',
-      };
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
-
-  @Delete(':id/excluir/:contaID')
-  fecharConta(@Param('id') id: string, @Param('contaID') contaID: string) {
-    try {
-      const cliente = this.clienteService.obterCliente(id);
-      if (!cliente) {
-        throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
-      }
-
-      const conta = cliente.contas.find((c) => c.id === contaID);
-      if (!conta) {
-        throw new HttpException(
-          'Conta não encontrada para o cliente',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      cliente.fecharConta(conta);
-      return {
-        statusCode: HttpStatus.NO_CONTENT,
-        message: 'Conta fechada com sucesso',
+        statusCode: HttpStatus.CREATED,
+        message: 'Conta poupança criada com sucesso',
       };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ContaCorrente, ContaPoupanca } from './conta.model';
-import { TipoConta } from 'src/enums/tipo-conta.enum';
+
 import { ClienteService } from 'src/cliente/cliente.service';
 
 @Injectable()

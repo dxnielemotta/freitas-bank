@@ -1,7 +1,7 @@
-import { Module, forwardRef } from '@nestjs/common';
 import { ClienteModule } from 'src/cliente/cliente.module';
 import { ContaController } from './conta.controller';
 import { ContaService } from './conta.service';
+import { Module } from '@nestjs/common';
 
 @Module({
   imports: [ClienteModule],

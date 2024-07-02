@@ -1,7 +1,9 @@
-import { Conta, ContaCorrente, ContaPoupanca } from 'src/conta/conta.model';
+import { Conta } from 'src/conta/conta.model';
+import { ContaCorrente } from 'src/conta/conta-corrente.model';
+import { ContaPoupanca } from 'src/conta/conta-poupanca.model';
 import { Cliente } from '../cliente/cliente.model';
 import { v4 as uuidv4 } from 'uuid';
-import { TipoConta } from 'src/enums/tipo-conta.enum';
+import { TipoConta } from 'src/conta/conta.model';
 
 export class Gerente {
   id: string;
