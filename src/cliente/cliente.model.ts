@@ -12,10 +12,9 @@ export class Cliente {
     public endereco: string,
     public telefone: string,
     public rendaSalarial: number,
-    public gerente: Gerente,
+    public gerenteID: string,
   ) {
     this.id = uuidv4();
-    this.gerente = gerente;
   }
 
   abrirConta(conta: Conta): void {
@@ -32,7 +31,7 @@ export class Cliente {
   }
 
   mudarTipoConta(conta: Conta, novoTipo: TipoConta): void {
-    let contaEncontrada = this.contas.find((item) => item === conta);
+    let contaEncontrada = this.contas.find((item) => item.id === conta.id);
 
     if (!contaEncontrada) {
       throw new Error('Conta não encontrada');

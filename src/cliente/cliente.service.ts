@@ -1,7 +1,7 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { Cliente } from './cliente.model';
-import { error } from 'console';
 import { GerenteService } from 'src/gerente/gerente.service';
+import { Gerente } from 'src/gerente/gerente.model';
 
 @Injectable()
 export class ClienteService {
@@ -25,7 +25,7 @@ export class ClienteService {
       endereco,
       telefone,
       rendaSalarial,
-      gerente,
+      gerenteID,
     );
     this.clientes.push(cliente);
     gerente.adicionarCliente(cliente);
@@ -33,9 +33,9 @@ export class ClienteService {
   }
 
   obterCliente(id: string): Cliente {
-    const cliente = this.clientes.find((cli) => cli.id === id);
+    const cliente = this.clientes.find((cliente) => cliente.id === id);
     if (!cliente) {
-      throw new error('Cliente não encontrado');
+      throw new Error('Cliente não encontrado');
     }
     return cliente;
   }

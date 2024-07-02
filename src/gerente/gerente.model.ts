@@ -19,6 +19,14 @@ export class Gerente {
     this.clientes = this.clientes.filter((item) => item.id !== cliente.id);
   }
 
+  obterCliente(clienteID: string): Cliente {
+    const cliente = this.clientes.find((cliente) => cliente.id === clienteID);
+    if (!cliente) {
+      throw new Error('Cliente não encontrado');
+    }
+    return cliente;
+  }
+
   abrirConta(cliente: Cliente, tipoConta: TipoConta): void {
     if (tipoConta === TipoConta.CORRENTE && cliente.rendaSalarial < 500) {
       throw new Error(
