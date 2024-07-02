@@ -24,18 +24,19 @@ export class GerenteService {
   }
 
   adicionarCliente(
-    gerenteId: string,
+    gerenteID: string,
     nomeCompleto: string,
     endereco: string,
     telefone: string,
     rendaSalarial: number,
   ): void {
-    const gerente = this.obterGerente(gerenteId);
+    const gerente = this.obterGerente(gerenteID);
     const cliente = this.clienteService.cadastrarCliente(
       nomeCompleto,
       endereco,
       telefone,
       rendaSalarial,
+      gerenteID,
     );
     gerente.adicionarCliente(cliente);
   }

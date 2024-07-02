@@ -1,24 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { Cliente } from './cliente.model';
 import { error } from 'console';
+import { GerenteService } from 'src/gerente/gerente.service';
 
 @Injectable()
 export class ClienteService {
   private clientes: Cliente[] = [];
+
+  constructor(private readonly gerenteService: GerenteService) {}
 
   cadastrarCliente(
     nomeCompleto: string,
     endereco: string,
     telefone: string,
     rendaSalarial: number,
+    gerenteID: string,
   ): Cliente {
+    const gerente = this.gerenteService.obterGerente(gerenteID);
     const cliente = new Cliente(
       nomeCompleto,
       endereco,
       telefone,
       rendaSalarial,
+      gerente,
     );
     this.clientes.push(cliente);
+    gerente.adicionarCliente(cliente);
     return cliente;
   }
 

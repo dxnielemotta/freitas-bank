@@ -22,12 +22,14 @@ export class ClienteController {
     @Body('endereco') endereco: string,
     @Body('telefone') telefone: string,
     @Body('rendaSalarial') rendaSalarial: number,
+    @Body('gerenteID') gerenteID: string,
   ): Cliente {
     return this.clienteService.cadastrarCliente(
       nomeCompleto,
       endereco,
       telefone,
       rendaSalarial,
+      gerenteID,
     );
   }
 }
