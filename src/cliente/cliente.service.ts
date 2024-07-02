@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { Cliente } from './cliente.model';
 import { error } from 'console';
 import { GerenteService } from 'src/gerente/gerente.service';
@@ -7,7 +7,10 @@ import { GerenteService } from 'src/gerente/gerente.service';
 export class ClienteService {
   private clientes: Cliente[] = [];
 
-  constructor(private readonly gerenteService: GerenteService) {}
+  constructor(
+    @Inject(forwardRef(() => GerenteService))
+    private gerenteService: GerenteService,
+  ) {}
 
   cadastrarCliente(
     nomeCompleto: string,

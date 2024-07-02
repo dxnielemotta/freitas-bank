@@ -1,13 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { Gerente } from './gerente.model';
 import { ClienteService } from '../cliente/cliente.service';
-import { Cliente } from 'src/cliente/cliente.model';
 
 @Injectable()
 export class GerenteService {
   private gerentes: Gerente[] = [];
 
-  constructor(private readonly clienteService: ClienteService) {}
+  constructor(
+    @Inject(forwardRef(() => ClienteService))
+    private clienteService: ClienteService,
+  ) {}
 
   criarGerente(nomeCompleto: string): Gerente {
     const gerente = new Gerente(nomeCompleto);
@@ -18,7 +20,7 @@ export class GerenteService {
   obterGerente(id: string): Gerente {
     const gerente = this.gerentes.find((gerente) => gerente.id === id);
     if (!gerente) {
-      throw new NotFoundException('Gerente não encontrado');
+      throw new Error('Gerente não encontrado');
     }
     return gerente;
   }
