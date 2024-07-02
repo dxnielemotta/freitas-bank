@@ -16,13 +16,14 @@ export class Cliente {
   ) {
     this.id = uuidv4();
     this.gerente = gerente;
-    // this.nomeCompleto = nomeCompleto;
-    // this.endereco = endereco;
-    // this.telefone = telefone;
-    // this.rendaSalarial = rendaSalarial;
   }
 
   abrirConta(conta: Conta): void {
+    if (conta.tipo === TipoConta.CORRENTE && this.rendaSalarial < 500) {
+      throw new Error(
+        'Cliente não possui os requisitos para abrir conta corrente.',
+      );
+    }
     this.contas.push(conta);
   }
 

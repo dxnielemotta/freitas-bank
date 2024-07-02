@@ -20,6 +20,11 @@ export class Gerente {
   }
 
   abrirConta(cliente: Cliente, tipoConta: TipoConta): void {
+    if (tipoConta === TipoConta.CORRENTE && cliente.rendaSalarial < 500) {
+      throw new Error(
+        'Cliente não possui os requisitos para abrir conta corrente.',
+      );
+    }
     const conta =
       tipoConta === TipoConta.CORRENTE
         ? new ContaCorrente(0, cliente.id)
