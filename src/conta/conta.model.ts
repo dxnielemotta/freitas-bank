@@ -1,14 +1,16 @@
-import { Cliente } from 'src/cliente/cliente.model';
 import { TipoConta } from 'src/enums/tipo-conta.enum';
 import { v4 as uuidv4 } from 'uuid';
 
 export abstract class Conta {
+  public id: string;
   constructor(
-    public id: string,
     public saldo: number,
-    public cliente: Cliente,
+    public clienteID: string,
     public tipo: TipoConta,
   ) {
+    // this.saldo = saldo;
+    // this.clienteID = clienteID;
+    // this.tipo = tipo;
     this.id = uuidv4();
   }
 
@@ -27,19 +29,15 @@ export abstract class Conta {
 }
 
 export class ContaCorrente extends Conta {
-  constructor(
-    id: string,
-    saldo: number,
-    cliente: Cliente,
-    tipo: TipoConta = TipoConta.CORRENTE,
-    private limiteChequeEspecial: number = 100,
-  ) {
-    super(id, saldo, cliente, tipo);
+  private limiteChequeEspecial: number = 100;
+
+  constructor(saldo: number, clienteID: string) {
+    super(saldo, clienteID, TipoConta.CORRENTE);
   }
 
   verificarSaldoInsuficiente(valor: number): void {
-    if (valor <= this.saldo + this.limiteChequeEspecial) {
-      return console.log('Saldo insuficiente');
+    if (valor > this.saldo + this.limiteChequeEspecial) {
+      throw new Error('Saldo insuficiente');
     }
   }
 
@@ -54,14 +52,10 @@ export class ContaCorrente extends Conta {
 }
 
 export class ContaPoupanca extends Conta {
-  constructor(
-    id: string,
-    saldo: number,
-    cliente: Cliente,
-    tipo: TipoConta = TipoConta.POUPANCA,
-    private taxaJuros: number = 0.01,
-  ) {
-    super(id, saldo, cliente, tipo);
+  private taxaJuros: number = 0.01;
+
+  constructor(saldo: number, clienteID: string) {
+    super(saldo, clienteID, TipoConta.POUPANCA);
   }
 
   transferir(destino: Conta, valor: number): void {
@@ -75,8 +69,8 @@ export class ContaPoupanca extends Conta {
   }
 
   verificarSaldoInsuficiente(valor: number): void {
-    if (valor <= this.saldo) {
-      return console.log('Saldo insuficiente');
+    if (valor > this.saldo) {
+      throw new Error('Saldo insuficiente');
     }
   }
 }
