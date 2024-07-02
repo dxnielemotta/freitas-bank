@@ -5,10 +5,10 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { ContaService } from './conta.service';
+import { ContaService } from '../conta/conta.service';
 
 @Controller('conta')
-export class ContaController {
+export class ClienteController {
   constructor(private readonly contaService: ContaService) {}
 
   @Post(':clienteID/corrente')

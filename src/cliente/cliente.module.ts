@@ -1,7 +1,8 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { ClienteController } from './cliente.controller';
+
 import { ClienteService } from './cliente.service';
 import { GerenteModule } from 'src/gerente/gerente.module';
+import { ClienteController } from './cliente.controller';
 
 @Module({
   imports: [forwardRef(() => GerenteModule)],
