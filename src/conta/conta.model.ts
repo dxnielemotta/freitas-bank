@@ -1,16 +1,15 @@
 import { Cliente } from 'src/cliente/cliente.model';
+import { TipoConta } from 'src/enums/tipo-conta.enum';
+import { v4 as uuidv4 } from 'uuid';
 
 export abstract class Conta {
-  public idCliente: string;
-
   constructor(
+    public id: string,
     public saldo: number,
     public cliente: Cliente,
-    public tipo: 'corrente' | 'poupanca',
+    public tipo: TipoConta,
   ) {
-    this.saldo = saldo;
-    this.idCliente = cliente.id;
-    this.tipo = tipo;
+    this.id = uuidv4();
   }
 
   depositar(valor: number): void {
@@ -29,12 +28,13 @@ export abstract class Conta {
 
 export class ContaCorrente extends Conta {
   constructor(
+    id: string,
     saldo: number,
     cliente: Cliente,
-    tipo: 'corrente',
-    private limiteChequeEspecial: number,
+    tipo: TipoConta = TipoConta.CORRENTE,
+    private limiteChequeEspecial: number = 100,
   ) {
-    super(saldo, cliente, tipo);
+    super(id, saldo, cliente, tipo);
   }
 
   verificarSaldoInsuficiente(valor: number): void {
@@ -55,22 +55,16 @@ export class ContaCorrente extends Conta {
 
 export class ContaPoupanca extends Conta {
   constructor(
+    id: string,
     saldo: number,
     cliente: Cliente,
-    tipo: 'poupanca',
-    private taxaJuros: number,
+    tipo: TipoConta = TipoConta.POUPANCA,
+    private taxaJuros: number = 0.01,
   ) {
-    super(saldo, cliente, tipo);
+    super(id, saldo, cliente, tipo);
   }
 
   transferir(destino: Conta, valor: number): void {
-    if (valor <= this.saldo) {
-      this.sacar(valor);
-      destino.depositar(valor);
-    } else {
-      throw new Error('Saldo insuficiente');
-    }
-
     this.verificarSaldoInsuficiente(valor);
     this.saldo -= valor;
     destino.saldo += valor;
