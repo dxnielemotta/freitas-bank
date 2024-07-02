@@ -1,16 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ClienteService } from './cliente/cliente.service';
-import { ClienteController } from './cliente/cliente.controller';
-import { ContaService } from './conta/conta.service';
-import { ContaController } from './conta/conta.controller';
-import { GerenteService } from './gerente/gerente.service';
-import { GerenteController } from './gerente/gerente.controller';
+
+// import { ClienteService } from './cliente/cliente.service';
+// import { ContaService } from './conta/conta.service';
+// import { ClienteController } from './cliente/cliente.controller';
+// import { ContaController } from './conta/conta.controller';
+// import { GerenteController } from './gerente/gerente.controller';
+// import { GerenteService } from './gerente/gerente.service';
+import { ClienteModule } from './cliente/cliente.module';
+import { GerenteModule } from './gerente/gerente.module';
+import { ContaModule } from './conta/conta.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController, ClienteController, ContaController, GerenteController],
-  providers: [AppService, ClienteService, ContaService, GerenteService],
+  imports: [ClienteModule, GerenteModule, ContaModule],
+  // controllers: [ClienteController, ContaController, GerenteController],
+  // providers: [ClienteService, ContaService, GerenteService],
 })
 export class AppModule {}
