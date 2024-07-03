@@ -1,11 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { ContaCorrente, ContaPoupanca } from './conta.model';
 
 import { ClienteService } from 'src/cliente/cliente.service';
 
 @Injectable()
 export class ContaService {
-  constructor(private readonly clienteService: ClienteService) {}
+  constructor(
+    @Inject(forwardRef(() => ClienteService))
+    private readonly clienteService: ClienteService,
+  ) {}
 
   criarContaCorrente(clienteID: string): void {
     const cliente = this.clienteService.obterCliente(clienteID);
