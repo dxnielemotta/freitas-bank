@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ContaService } from './conta.service';
 
-@Controller('conta')
+@Controller('contas')
 export class ContaController {
   constructor(private readonly contaService: ContaService) {}
 
