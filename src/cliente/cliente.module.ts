@@ -4,8 +4,10 @@ import { ClienteService } from './cliente.service';
 import { GerenteModule } from 'src/gerente/gerente.module';
 import { ClienteController } from './cliente.controller';
 
+import { ContaModule } from 'src/conta/conta.module';
+
 @Module({
-  imports: [forwardRef(() => GerenteModule)],
+  imports: [forwardRef(() => GerenteModule), forwardRef(() => ContaModule)],
   controllers: [ClienteController],
   providers: [ClienteService],
   exports: [ClienteService],
