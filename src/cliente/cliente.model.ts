@@ -1,4 +1,5 @@
-import { Conta, TipoConta } from 'src/conta/conta.model';
+import { Conta } from 'src/conta/conta.model';
+import { TipoConta } from 'src/enums/tipo-conta.enum';
 import { v4 as uuidv4 } from 'uuid';
 
 export class Cliente {
