@@ -1,7 +1,6 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { Cliente } from './cliente.model';
 import { GerenteService } from 'src/gerente/gerente.service';
-import { Gerente } from 'src/gerente/gerente.model';
 
 @Injectable()
 export class ClienteService {
