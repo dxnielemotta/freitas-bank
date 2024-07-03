@@ -74,28 +74,6 @@ export class GerenteController {
     @Body('contaID') contaID: string,
     @Body('novoTipo') novoTipo: TipoConta,
   ) {
-    // const gerente = this.gerenteService.obterGerente(id);
-    // if (!gerente) {
-    //   throw new HttpException('Gerente não encontrado', HttpStatus.NOT_FOUND);
-    // }
-
-    // const cliente = gerente.clientes.find((c) => c.id === clienteID);
-    // if (!cliente) {
-    //   throw new HttpException(
-    //     'Cliente não encontrado para o gerente',
-    //     HttpStatus.NOT_FOUND,
-    //   );
-    // }
-
-    // const conta = cliente.contas.find((c) => c.id === contaID);
-    // if (!conta) {
-    //   throw new HttpException(
-    //     'Conta não encontrada para o cliente',
-    //     HttpStatus.NOT_FOUND,
-    //   );
-    // }
-
-    // gerente.mudarTipoConta(cliente, conta, novoTipo);
     try {
       this.gerenteService.mudarTipoConta(id, clienteID, contaID, novoTipo);
       return {
@@ -113,29 +91,6 @@ export class GerenteController {
     @Param('clienteID') clienteID: string,
     @Param('contaID') contaID: string,
   ) {
-    //     const gerente = this.gerenteService.obterGerente(id);
-    //     if (!gerente) {
-    //       throw new HttpException('Gerente não encontrado', HttpStatus.NOT_FOUND);
-    //     }
-
-    //     const cliente = gerente.clientes.find((c) => c.id === clienteID);
-    //     if (!cliente) {
-    //       throw new HttpException(
-    //         'Cliente não encontrado para o gerente',
-    //         HttpStatus.NOT_FOUND,
-    //       );
-    //     }
-
-    //     const conta = cliente.contas.find((c) => c.id === contaID);
-    //     if (!conta) {
-    //       throw new HttpException(
-    //         'Conta não encontrada para o cliente',
-    //         HttpStatus.NOT_FOUND,
-    //       );
-    //     }
-
-    //     gerente.fecharConta(cliente, conta);
-    //   }
     try {
       this.gerenteService.fecharConta(id, clienteID, contaID);
       return {
