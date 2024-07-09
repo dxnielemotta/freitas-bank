@@ -9,7 +9,9 @@ export class ContaService {
   private contas: Conta[] = [];
 
   abrirConta(tipo: TipoConta, clienteID: string) {
-    return ContaFactory.criarConta(tipo, clienteID);
+    const conta = ContaFactory.criarConta(tipo, clienteID);
+    this.contas.push(conta);
+    return conta;
   }
 
   fecharConta(contaID: string) {
@@ -23,5 +25,13 @@ export class ContaService {
       throw new Error('Conta não encontrada');
     }
     contaEncontrada.tipo = novoTipo;
+  }
+
+  listarContas() {
+    return this.contas;
+  }
+
+  obterContaPorId(contaID: string) {
+    return this.contas.find((conta) => conta.id == contaID);
   }
 }

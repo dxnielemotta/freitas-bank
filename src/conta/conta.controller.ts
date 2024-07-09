@@ -1,9 +1,9 @@
 import {
   Controller,
   Param,
-  Post,
   HttpException,
   HttpStatus,
+  Get,
 } from '@nestjs/common';
 import { ContaService } from './conta.service';
 
@@ -11,26 +11,27 @@ import { ContaService } from './conta.service';
 export class ContaController {
   constructor(private readonly contaService: ContaService) {}
 
-  @Post(':clienteID/corrente')
-  criarContaCorrente(@Param('clienteID') clienteID: string) {
+  @Get('/')
+  listarContas() {
     try {
-      this.contaService.criarContaCorrente(clienteID);
+      const contas = this.contaService.listarContas();
       return {
-        statusCode: HttpStatus.CREATED,
-        message: 'Conta corrente criada com sucesso',
+        statusCode: HttpStatus.OK,
+        message: 'Contas retornadas com sucesso',
+        data: contas,
       };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
-
-  @Post(':clienteID/poupanca')
-  criarContaPoupanca(@Param('clienteID') clienteID: string) {
+  @Get(':id')
+  obterContaPorId(@Param('id') contaID: string) {
     try {
-      this.contaService.criarContaPoupanca(clienteID);
+      const conta = this.contaService.obterContaPorId(contaID);
       return {
-        statusCode: HttpStatus.CREATED,
-        message: 'Conta poupança criada com sucesso',
+        statusCode: HttpStatus.OK,
+        message: 'Conta retornada com sucesso',
+        data: conta,
       };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
