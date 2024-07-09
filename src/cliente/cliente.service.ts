@@ -64,4 +64,19 @@ export class ClienteService {
     //adicionando a conta ao array de contas do cliente
     return this.contas.push(conta);
   }
+
+  //mudarConta do conta.service
+  mudarTipoConta(contaID: string, novoTipo: TipoConta) {
+    this.contaService.mudarTipoConta(contaID, novoTipo);
+  }
+
+  //fecharConta do conta.service
+  fecharConta(contaID: string) {
+    this.contaService.fecharConta(contaID);
+  }
+
+  listarContasDoCliente(clienteID: string) {
+    const contas = this.contas.filter((conta) => conta.clienteID === clienteID);
+    return contas;
+  }
 }

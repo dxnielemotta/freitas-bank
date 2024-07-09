@@ -73,9 +73,6 @@ export class ClienteController {
   @Post(':id/:tipoConta')
   abrirConta(@Param('id') id: string, @Param('tipoConta') tipo: TipoConta) {
     try {
-      //substituir pelo metodo add conta ao cliente do cliente.service onde ja tem a verificação da renda
-      // ContaFactory.criarConta(TipoConta.CORRENTE, clienteID);
-
       this.clienteService.adicionarContaAoCliente(tipo, id);
       return {
         statusCode: HttpStatus.CREATED,
@@ -86,83 +83,113 @@ export class ClienteController {
     }
   }
 
-  // @Post(':clienteID/poupanca')
-  // criarContaPoupanca(@Param('clienteID') clienteID: string) {
-  //   try {
-  //     //usar factory
-  //     ContaFactory.criarConta(TipoConta.POUPANCA, clienteID);
-  //     return {
-  //       statusCode: HttpStatus.CREATED,
-  //       message: 'Conta poupança criada com sucesso',
-  //     };
-  //   } catch (error) {
-  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-  //   }
-  // }
+  //mudarTipoConta
+  @Put('mudarconta/:contaID')
+  mudarTipoConta(
+    @Param('contaID') contaID: string,
+    @Body('novoTipo') novoTipo: TipoConta,
+  ) {
+    //adicionar verificação depois para ver se o cliente tem renda menor que 500 para fazer a mudança
+    try {
+      this.clienteService.mudarTipoConta(contaID, novoTipo);
+      return {
+        statusCode: HttpStatus.NO_CONTENT,
+        message: `Tipo da conta alterado com sucesso`,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 
-  // @Put(':id/mudar')
-  // mudarTipoConta(
-  //   @Param('id') id: string,
-  //   @Body('contaID') contaID: string,
-  //   @Body('novoTipo') novoTipo: TipoConta,
-  // ) {
-  //   try {
-  //     const cliente = this.clienteService.obterCliente(id);
-  //     if (!cliente) {
-  //       throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
-  //     }
+  //fecharConta do cliente.servuce
+  @Delete('excluir/:contaID')
+  fecharConta(@Param('contaID') contaID: string) {
+    try {
+      this.clienteService.fecharConta(contaID);
+      return {
+        statusCode: HttpStatus.NO_CONTENT,
+        message: `Conta fechada com sucesso`,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 
-  //     const conta = this.clienteContaService.contas.find(
-  //       (c) => c.id == contaID,
-  //     );
-
-  //     if (!conta) {
-  //       throw new HttpException(
-  //         'Conta não encontrada para o cliente',
-  //         HttpStatus.NOT_FOUND,
-  //       );
-  //     }
-
-  //     this.clienteContaService.mudarTipoConta(conta, novoTipo);
-
-  //     return {
-  //       statusCode: HttpStatus.OK,
-  //       message: 'Mudança de conta feita com sucesso',
-  //     };
-  //   } catch (error) {
-  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-  //   }
-  // }
-
-  // @Delete(':id/excluir/:contaID')
-  // fecharConta(@Param('id') id: string, @Param('contaID') contaID: string) {
-  //   try {
-  //     const cliente = this.clienteService.obterCliente(id);
-  //     if (!cliente) {
-  //       throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
-  //     }
-
-  //     const conta = this.clienteContaService.contas.find(
-  //       (c) => c.id == contaID,
-  //     );
-
-  //     if (!conta) {
-  //       throw new HttpException(
-  //         'Conta não encontrada para o cliente',
-  //         HttpStatus.NOT_FOUND,
-  //       );
-  //     }
-
-  //     this.clienteContaService.fecharConta(conta);
-
-  //     return {
-  //       statusCode: HttpStatus.NO_CONTENT,
-  //       message: 'Conta fechada com sucesso',
-  //     };
-  //   } catch (error) {
-  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-  //   }
-  // }
-
-  //adicionar um listar conta do cliente
+  @Get(':clienteID/contas')
+  listarContasDoCliente(@Param('clienteID') clienteID: string) {
+    try {
+      const contas = this.clienteService.listarContasDoCliente(clienteID);
+      return {
+        statusCode: HttpStatus.OK,
+        message: `Contas do cliente retornadas com sucesso`,
+        data: contas,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 }
+
+// @Put(':id/mudar')
+// mudarTipoConta(
+//   @Param('id') id: string,
+//   @Body('contaID') contaID: string,
+//   @Body('novoTipo') novoTipo: TipoConta,
+// ) {
+//   try {
+//     const cliente = this.clienteService.obterCliente(id);
+//     if (!cliente) {
+//       throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
+//     }
+
+//     const conta = this.clienteContaService.contas.find(
+//       (c) => c.id == contaID,
+//     );
+
+//     if (!conta) {
+//       throw new HttpException(
+//         'Conta não encontrada para o cliente',
+//         HttpStatus.NOT_FOUND,
+//       );
+//     }
+
+//     this.clienteContaService.mudarTipoConta(conta, novoTipo);
+
+//     return {
+//       statusCode: HttpStatus.OK,
+//       message: 'Mudança de conta feita com sucesso',
+//     };
+//   } catch (error) {
+//     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+//   }
+// }
+
+// @Delete(':id/excluir/:contaID')
+// fecharConta(@Param('id') id: string, @Param('contaID') contaID: string) {
+//   try {
+//     const cliente = this.clienteService.obterCliente(id);
+//     if (!cliente) {
+//       throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
+//     }
+
+//     const conta = this.clienteContaService.contas.find(
+//       (c) => c.id == contaID,
+//     );
+
+//     if (!conta) {
+//       throw new HttpException(
+//         'Conta não encontrada para o cliente',
+//         HttpStatus.NOT_FOUND,
+//       );
+//     }
+
+//     this.clienteContaService.fecharConta(conta);
+
+//     return {
+//       statusCode: HttpStatus.NO_CONTENT,
+//       message: 'Conta fechada com sucesso',
+//     };
+//   } catch (error) {
+//     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+//   }
+// }
