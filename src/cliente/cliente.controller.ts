@@ -4,73 +4,21 @@ import {
   Post,
   HttpException,
   HttpStatus,
-  Inject,
-  forwardRef,
   Get,
   Body,
   Put,
   Delete,
 } from '@nestjs/common';
-import { ContaService } from '../conta/conta.service';
+
 import { ClienteService } from './cliente.service';
 import { TipoConta } from 'src/enums/tipo-conta.enum';
 
 @Controller('clientes')
 export class ClienteController {
   constructor(
-    @Inject(forwardRef(() => ContaService))
-    private readonly contaService: ContaService,
+    // @Inject(forwardRef(() => ContaService))
     private readonly clienteService: ClienteService,
   ) {}
-
-  @Get()
-  listarClientes() {
-    const clientes = this.clienteService.listarClientes();
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Clientes retornados com sucesso',
-      data: clientes,
-    };
-  }
-
-  @Get(':id')
-  obterCliente(@Param('id') id: string) {
-    try {
-      const cliente = this.clienteService.obterCliente(id);
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Cliente retornado com sucesso',
-        data: cliente,
-      };
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
-    }
-  }
-  @Post(':clienteID/corrente')
-  criarContaCorrente(@Param('clienteID') clienteID: string) {
-    try {
-      this.contaService.criarContaCorrente(clienteID);
-      return {
-        statusCode: HttpStatus.CREATED,
-        message: 'Conta corrente criada com sucesso',
-      };
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
-
-  @Post(':clienteID/poupanca')
-  criarContaPoupanca(@Param('clienteID') clienteID: string) {
-    try {
-      this.contaService.criarContaPoupanca(clienteID);
-      return {
-        statusCode: HttpStatus.CREATED,
-        message: 'Conta poupança criada com sucesso',
-      };
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
 
   @Post('cadastrar')
   cadastrarCliente(
@@ -98,58 +46,123 @@ export class ClienteController {
     }
   }
 
-  @Put(':id/mudar')
-  mudarTipoConta(
-    @Param('id') id: string,
-    @Body('contaID') contaID: string,
-    @Body('novoTipo') novoTipo: TipoConta,
-  ) {
+  @Get()
+  listarClientes() {
+    const clientes = this.clienteService.listarClientes();
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Clientes retornados com sucesso',
+      data: clientes,
+    };
+  }
+
+  @Get(':id')
+  obterCliente(@Param('id') id: string) {
     try {
       const cliente = this.clienteService.obterCliente(id);
-      if (!cliente) {
-        throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
-      }
-      const conta = cliente.contas.find((c) => c.id === contaID);
-      if (!conta) {
-        throw new HttpException(
-          'Conta não encontrada para o cliente',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      cliente.mudarTipoConta(conta, novoTipo);
-
       return {
         statusCode: HttpStatus.OK,
-        message: 'Mudança de conta feita com sucesso',
+        message: 'Cliente retornado com sucesso',
+        data: cliente,
       };
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
-  @Delete(':id/excluir/:contaID')
-  fecharConta(@Param('id') id: string, @Param('contaID') contaID: string) {
+  @Post(':id/:tipoConta')
+  abrirConta(@Param('id') id: string, @Param('tipoConta') tipo: TipoConta) {
     try {
-      const cliente = this.clienteService.obterCliente(id);
-      if (!cliente) {
-        throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
-      }
-      const conta = cliente.contas.find((c) => c.id === contaID);
-      if (!conta) {
-        throw new HttpException(
-          'Conta não encontrada para o cliente',
-          HttpStatus.NOT_FOUND,
-        );
-      }
+      //substituir pelo metodo add conta ao cliente do cliente.service onde ja tem a verificação da renda
+      // ContaFactory.criarConta(TipoConta.CORRENTE, clienteID);
 
-      cliente.fecharConta(conta);
+      this.clienteService.adicionarContaAoCliente(tipo, id);
       return {
-        statusCode: HttpStatus.NO_CONTENT,
-        message: 'Conta fechada com sucesso',
+        statusCode: HttpStatus.CREATED,
+        message: `Conta ${tipo} criada com sucesso`,
       };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
+  // @Post(':clienteID/poupanca')
+  // criarContaPoupanca(@Param('clienteID') clienteID: string) {
+  //   try {
+  //     //usar factory
+  //     ContaFactory.criarConta(TipoConta.POUPANCA, clienteID);
+  //     return {
+  //       statusCode: HttpStatus.CREATED,
+  //       message: 'Conta poupança criada com sucesso',
+  //     };
+  //   } catch (error) {
+  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+  //   }
+  // }
+
+  // @Put(':id/mudar')
+  // mudarTipoConta(
+  //   @Param('id') id: string,
+  //   @Body('contaID') contaID: string,
+  //   @Body('novoTipo') novoTipo: TipoConta,
+  // ) {
+  //   try {
+  //     const cliente = this.clienteService.obterCliente(id);
+  //     if (!cliente) {
+  //       throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
+  //     }
+
+  //     const conta = this.clienteContaService.contas.find(
+  //       (c) => c.id == contaID,
+  //     );
+
+  //     if (!conta) {
+  //       throw new HttpException(
+  //         'Conta não encontrada para o cliente',
+  //         HttpStatus.NOT_FOUND,
+  //       );
+  //     }
+
+  //     this.clienteContaService.mudarTipoConta(conta, novoTipo);
+
+  //     return {
+  //       statusCode: HttpStatus.OK,
+  //       message: 'Mudança de conta feita com sucesso',
+  //     };
+  //   } catch (error) {
+  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+  //   }
+  // }
+
+  // @Delete(':id/excluir/:contaID')
+  // fecharConta(@Param('id') id: string, @Param('contaID') contaID: string) {
+  //   try {
+  //     const cliente = this.clienteService.obterCliente(id);
+  //     if (!cliente) {
+  //       throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
+  //     }
+
+  //     const conta = this.clienteContaService.contas.find(
+  //       (c) => c.id == contaID,
+  //     );
+
+  //     if (!conta) {
+  //       throw new HttpException(
+  //         'Conta não encontrada para o cliente',
+  //         HttpStatus.NOT_FOUND,
+  //       );
+  //     }
+
+  //     this.clienteContaService.fecharConta(conta);
+
+  //     return {
+  //       statusCode: HttpStatus.NO_CONTENT,
+  //       message: 'Conta fechada com sucesso',
+  //     };
+  //   } catch (error) {
+  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+  //   }
+  // }
+
+  //adicionar um listar conta do cliente
 }
