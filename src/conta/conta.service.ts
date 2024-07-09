@@ -15,7 +15,11 @@ export class ContaService {
   }
 
   fecharConta(contaID: string) {
-    return this.contas.filter((conta) => conta.id !== contaID);
+    const index = this.contas.findIndex((conta) => conta.id !== contaID);
+    if (index < 0) {
+      throw new Error('Conta não encontrada');
+    }
+    return this.contas.splice(index, 1);
   }
 
   mudarTipoConta(contaID: string, novoTipo: TipoConta) {

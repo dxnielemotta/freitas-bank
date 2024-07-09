@@ -28,6 +28,9 @@ export class ContaController {
   obterContaPorId(@Param('id') contaID: string) {
     try {
       const conta = this.contaService.obterContaPorId(contaID);
+      if (!conta) {
+        throw new Error('Conta não encontrada');
+      }
       return {
         statusCode: HttpStatus.OK,
         message: 'Conta retornada com sucesso',
