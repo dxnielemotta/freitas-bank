@@ -1,30 +1,27 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
-import { ContaCorrente, ContaPoupanca } from './conta.model';
+import { Injectable } from '@nestjs/common';
 
-import { ClienteService } from 'src/cliente/cliente.service';
+import { Conta } from './conta.model';
+import { ContaFactory } from './conta.factory';
+import { TipoConta } from 'src/enums/tipo-conta.enum';
 
 @Injectable()
 export class ContaService {
-  constructor(
-    @Inject(forwardRef(() => ClienteService))
-    private readonly clienteService: ClienteService,
-  ) {}
+  private contas: Conta[] = [];
 
-  criarContaCorrente(clienteID: string): void {
-    const cliente = this.clienteService.obterCliente(clienteID);
-    if (!cliente) {
-      throw new Error('Cliente não encontrado');
-    }
-    const conta = new ContaCorrente(0, clienteID);
-    cliente.abrirConta(conta);
+  abrirConta(tipo: TipoConta, clienteID: string) {
+    return ContaFactory.criarConta(tipo, clienteID);
   }
 
-  criarContaPoupanca(clienteID: string): void {
-    const cliente = this.clienteService.obterCliente(clienteID);
-    if (!cliente) {
-      throw new Error('Cliente não encontrado');
+  fecharConta(contaID: string) {
+    return this.contas.filter((conta) => conta.id !== contaID);
+  }
+
+  mudarTipoConta(contaID: string, novoTipo: TipoConta) {
+    const contaEncontrada = this.contas.find((conta) => conta.id == contaID);
+
+    if (!contaEncontrada) {
+      throw new Error('Conta não encontrada');
     }
-    const conta = new ContaPoupanca(0, clienteID);
-    cliente.abrirConta(conta);
+    contaEncontrada.tipo = novoTipo;
   }
 }
