@@ -15,10 +15,7 @@ import { TipoConta } from 'src/enums/tipo-conta.enum';
 
 @Controller('clientes')
 export class ClienteController {
-  constructor(
-    // @Inject(forwardRef(() => ContaService))
-    private readonly clienteService: ClienteService,
-  ) {}
+  constructor(private readonly clienteService: ClienteService) {}
 
   @Post('cadastrar')
   cadastrarCliente(
@@ -83,13 +80,11 @@ export class ClienteController {
     }
   }
 
-  //mudarTipoConta
   @Put('mudarconta/:contaID')
   mudarTipoConta(
     @Param('contaID') contaID: string,
     @Body('novoTipo') novoTipo: TipoConta,
   ) {
-    //adicionar verificação depois para ver se o cliente tem renda menor que 500 para fazer a mudança
     try {
       this.clienteService.mudarTipoConta(contaID, novoTipo);
       return {
@@ -101,7 +96,8 @@ export class ClienteController {
     }
   }
 
-  //fecharConta do cliente.servuce
+  //refazer logia de fecharConta no conta.service
+
   @Delete('excluir/:contaID')
   fecharConta(@Param('contaID') contaID: string) {
     try {
@@ -118,6 +114,10 @@ export class ClienteController {
   @Get(':clienteID/contas')
   listarContasDoCliente(@Param('clienteID') clienteID: string) {
     try {
+      const cliente = this.clienteService.obterCliente(clienteID);
+      if (!cliente) {
+        throw new Error('Cliente não encontrado');
+      }
       const contas = this.clienteService.listarContasDoCliente(clienteID);
       return {
         statusCode: HttpStatus.OK,
@@ -129,67 +129,3 @@ export class ClienteController {
     }
   }
 }
-
-// @Put(':id/mudar')
-// mudarTipoConta(
-//   @Param('id') id: string,
-//   @Body('contaID') contaID: string,
-//   @Body('novoTipo') novoTipo: TipoConta,
-// ) {
-//   try {
-//     const cliente = this.clienteService.obterCliente(id);
-//     if (!cliente) {
-//       throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
-//     }
-
-//     const conta = this.clienteContaService.contas.find(
-//       (c) => c.id == contaID,
-//     );
-
-//     if (!conta) {
-//       throw new HttpException(
-//         'Conta não encontrada para o cliente',
-//         HttpStatus.NOT_FOUND,
-//       );
-//     }
-
-//     this.clienteContaService.mudarTipoConta(conta, novoTipo);
-
-//     return {
-//       statusCode: HttpStatus.OK,
-//       message: 'Mudança de conta feita com sucesso',
-//     };
-//   } catch (error) {
-//     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-//   }
-// }
-
-// @Delete(':id/excluir/:contaID')
-// fecharConta(@Param('id') id: string, @Param('contaID') contaID: string) {
-//   try {
-//     const cliente = this.clienteService.obterCliente(id);
-//     if (!cliente) {
-//       throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
-//     }
-
-//     const conta = this.clienteContaService.contas.find(
-//       (c) => c.id == contaID,
-//     );
-
-//     if (!conta) {
-//       throw new HttpException(
-//         'Conta não encontrada para o cliente',
-//         HttpStatus.NOT_FOUND,
-//       );
-//     }
-
-//     this.clienteContaService.fecharConta(conta);
-
-//     return {
-//       statusCode: HttpStatus.NO_CONTENT,
-//       message: 'Conta fechada com sucesso',
-//     };
-//   } catch (error) {
-//     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-//   }
-// }

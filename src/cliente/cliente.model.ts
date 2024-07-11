@@ -1,7 +1,9 @@
+import { Conta } from 'src/conta/conta.model';
 import { v4 as uuidv4 } from 'uuid';
 
 export class Cliente {
   public id: string;
+  public contas: Conta[];
 
   constructor(
     public nomeCompleto: string,
