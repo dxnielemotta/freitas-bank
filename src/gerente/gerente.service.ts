@@ -35,7 +35,6 @@ export class GerenteService {
   }
 
   abrirConta(tipo: TipoConta, clienteID: string) {
-    // verificando a renda do cliente
     const cliente = this.clientes.find((cli) => cli.id === clienteID);
 
     if (tipo === TipoConta.CORRENTE && cliente.rendaSalarial < 500) {
@@ -44,18 +43,14 @@ export class GerenteService {
       );
     }
 
-    //abrindo a conta
     const conta = this.contaService.abrirConta(tipo, clienteID);
-    //adicionando a conta ao array de contas do cliente
     return cliente.contas.push(conta);
   }
 
-  //mudarConta do conta.service
   mudarTipoConta(contaID: string, novoTipo: TipoConta) {
     this.contaService.mudarTipoConta(contaID, novoTipo);
   }
 
-  //fecharConta do conta.service
   fecharConta(contaID: string) {
     this.contaService.fecharConta(contaID);
   }

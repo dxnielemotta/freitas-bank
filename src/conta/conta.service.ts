@@ -26,7 +26,6 @@ export class ContaService {
       throw new Error('Conta não encontrada');
     }
 
-    // Remove a conta do array de contas geral
     const index = this.contas.findIndex((c) => c.id === contaID);
     if (index > -1) {
       this.contas.splice(index, 1);

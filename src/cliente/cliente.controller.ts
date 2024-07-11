@@ -96,8 +96,6 @@ export class ClienteController {
     }
   }
 
-  //refazer logia de fecharConta no conta.service
-
   @Delete('excluir/:contaID')
   fecharConta(@Param('contaID') contaID: string) {
     try {
