@@ -40,7 +40,7 @@ export class GerenteController {
       const gerente = this.gerenteService.obterGerente(gerenteID);
       return {
         statusCode: HttpStatus.OK,
-        message: 'Gerentes retornado com sucesso',
+        message: 'Gerente retornado com sucesso',
         data: gerente,
       };
     } catch (error) {
@@ -62,27 +62,26 @@ export class GerenteController {
     }
   }
 
-  @Post(':gerenteID/cadastrar')
-  adicionarClienteAoGerente(
+  @Post(':gerenteID/:clienteID/:tipo')
+  abrirConta(
     @Param('gerenteID') gerenteID: string,
-    @Body('nomeCompleto') nomeCompleto: string,
-    @Body('endereco') endereco: string,
-    @Body('telefone') telefone: string,
-    @Body('rendaSalarial') rendaSalarial: number,
+    @Param('clienteID') clienteID: string,
+    @Param('tipo') tipo: TipoConta,
   ) {
     try {
-      const cliente = this.gerenteService.adicionarClienteAoGerente(
-        gerenteID,
-        nomeCompleto,
-        endereco,
-        telefone,
-        rendaSalarial,
+      console.log(`Tipo de conta recebido: ${tipo}`);
+      this.gerenteService.obterGerente(gerenteID);
+      this.clienteService.obterCliente(clienteID);
+
+      const conta = this.clienteService.adicionarContaAoCliente(
+        tipo,
+        clienteID,
       );
 
       return {
         statusCode: HttpStatus.CREATED,
-        message: 'Cliente criado e adicionado com sucesso',
-        data: cliente,
+        message: 'Conta foi aberta com sucesso',
+        data: conta,
       };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
