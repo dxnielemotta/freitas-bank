@@ -12,6 +12,7 @@ export class ClienteService {
 
   constructor(
     @Inject(forwardRef(() => GerenteService))
+    @Inject(forwardRef(() => ContaService))
     private gerenteService: GerenteService,
     private contaService: ContaService,
   ) {}
@@ -51,7 +52,12 @@ export class ClienteService {
   //usar esse metodo pra criar uma rota pra listar as contas do cliente depois
   adicionarContaAoCliente(tipo: TipoConta, clienteID: string) {
     // verificando a renda do cliente
-    const cliente = this.clientes.find((cli) => cli.id === clienteID);
+    const cliente = this.obterCliente(clienteID);
+    // console.log('Cliente obtido', cliente);
+
+    if (!cliente.contas) {
+      cliente.contas = []; // Inicializando contas se ainda não estiver definido
+    }
 
     if (tipo === TipoConta.CORRENTE && cliente.rendaSalarial < 500) {
       throw new Error(
@@ -61,8 +67,11 @@ export class ClienteService {
 
     //abrindo a conta
     const conta = this.contaService.abrirConta(tipo, clienteID);
+
     //adicionando a conta ao array de contas do cliente
-    return this.contas.push(conta);
+    cliente.contas.push(conta);
+    this.contas.push(conta);
+    return;
   }
 
   //mudarConta do conta.service
@@ -75,8 +84,15 @@ export class ClienteService {
     this.contaService.fecharConta(contaID);
   }
 
-  listarContasDoCliente(clienteID: string) {
+  listarContasDoCliente(clienteID: string): Conta[] {
     const contas = this.contas.filter((conta) => conta.clienteID === clienteID);
     return contas;
+  }
+
+  removerContaDoCliente(clienteID: string, contaID: string) {
+    const cliente = this.obterCliente(clienteID);
+
+    cliente.contas = cliente.contas.filter((conta) => conta.id !== contaID);
+    this.contas = this.contas.filter((conta) => conta.id !== contaID);
   }
 }
