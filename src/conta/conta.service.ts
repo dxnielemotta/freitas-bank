@@ -4,6 +4,8 @@ import { Conta } from './conta.model';
 import { ContaFactory } from './conta.factory';
 import { TipoConta } from 'src/enums/tipo-conta.enum';
 import { ClienteService } from 'src/cliente/cliente.service';
+import { TipoPagamento } from 'src/enums/tipo-pagamento.enum';
+import { PagamentoFactory } from 'src/pagamento/pagamento.factory';
 
 @Injectable()
 export class ContaService {
@@ -50,5 +52,15 @@ export class ContaService {
 
   obterContaPorId(contaID: string) {
     return this.contas.find((conta) => conta.id == contaID);
+  }
+
+  fazerPagamento(contaID: string, valor: number, tipoPagamento: TipoPagamento) {
+    const conta = this.obterContaPorId(contaID);
+    if (!conta) {
+      throw new Error('Conta não encontrada');
+    }
+
+    const pagamento = PagamentoFactory.criarPagamento(tipoPagamento);
+    pagamento.pagar(valor, conta);
   }
 }

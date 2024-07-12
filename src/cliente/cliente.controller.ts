@@ -12,6 +12,7 @@ import {
 
 import { ClienteService } from './cliente.service';
 import { TipoConta } from 'src/enums/tipo-conta.enum';
+import { TipoPagamento } from 'src/enums/tipo-pagamento.enum';
 
 @Controller('clientes')
 export class ClienteController {
@@ -121,6 +122,35 @@ export class ClienteController {
         statusCode: HttpStatus.OK,
         message: `Contas do cliente retornadas com sucesso`,
         data: contas,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post(':clienteID/contas/:contaID')
+  fazerPagamento(
+    @Param('clienteID') clienteID: string,
+    @Param('contaID') contaID: string,
+    @Body('valor') valor: number,
+    @Body('tipoPagamento') tipoPagamento: TipoPagamento,
+  ) {
+    try {
+      const cliente = this.clienteService.obterCliente(clienteID);
+      if (!cliente) {
+        throw new Error('Cliente não encontrado');
+      }
+
+      const pagamento = this.clienteService.fazerPagamento(
+        contaID,
+        valor,
+        tipoPagamento,
+      );
+
+      return {
+        statusCode: HttpStatus.CREATED,
+        message: `Pagamento via ${tipoPagamento} no valor de R$ ${valor} realizado com sucesso`,
+        data: pagamento,
       };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);

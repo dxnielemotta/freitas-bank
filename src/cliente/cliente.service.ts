@@ -4,6 +4,8 @@ import { GerenteService } from 'src/gerente/gerente.service';
 import { Conta } from 'src/conta/conta.model';
 import { TipoConta } from 'src/enums/tipo-conta.enum';
 import { ContaService } from 'src/conta/conta.service';
+import { TipoPagamento } from 'src/enums/tipo-pagamento.enum';
+import { PagamentoFactory } from 'src/pagamento/pagamento.factory';
 
 @Injectable()
 export class ClienteService {
@@ -87,5 +89,9 @@ export class ClienteService {
 
     cliente.contas = cliente.contas.filter((conta) => conta.id !== contaID);
     this.contas = this.contas.filter((conta) => conta.id !== contaID);
+  }
+
+  fazerPagamento(contaID: string, valor: number, tipoPagamento: TipoPagamento) {
+    this.contaService.fazerPagamento(contaID, valor, tipoPagamento);
   }
 }

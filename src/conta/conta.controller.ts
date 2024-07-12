@@ -4,8 +4,11 @@ import {
   HttpException,
   HttpStatus,
   Get,
+  Post,
+  Body,
 } from '@nestjs/common';
 import { ContaService } from './conta.service';
+import { TipoPagamento } from 'src/enums/tipo-pagamento.enum';
 
 @Controller('contas')
 export class ContaController {
@@ -24,8 +27,9 @@ export class ContaController {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
-  @Get(':id')
-  obterContaPorId(@Param('id') contaID: string) {
+
+  @Get(':contaID')
+  obterContaPorId(@Param('contaID') contaID: string) {
     try {
       const conta = this.contaService.obterContaPorId(contaID);
       if (!conta) {
@@ -35,6 +39,23 @@ export class ContaController {
         statusCode: HttpStatus.OK,
         message: 'Conta retornada com sucesso',
         data: conta,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post(':contaID/pagar')
+  fazerPagamento(
+    @Param('contaID') contaID: string,
+    @Body('valor') valor: number,
+    @Body('tipoPagamento') tipoPagamento: TipoPagamento,
+  ) {
+    try {
+      this.contaService.fazerPagamento(contaID, valor, tipoPagamento);
+      return {
+        statusCode: HttpStatus.CREATED,
+        message: `Pagamento via ${tipoPagamento} realizado com sucesso!`,
       };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
