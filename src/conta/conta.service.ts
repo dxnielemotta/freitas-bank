@@ -23,7 +23,7 @@ export class ContaService {
   }
 
   fecharConta(contaID: string) {
-    const conta = this.contas.find((c) => c.id == contaID);
+    const conta = this.obterContaPorId(contaID);
     if (!conta) {
       throw new Error('Conta não encontrada');
     }
@@ -38,7 +38,7 @@ export class ContaService {
   }
 
   mudarTipoConta(contaID: string, novoTipo: TipoConta) {
-    const contaEncontrada = this.contas.find((conta) => conta.id == contaID);
+    const contaEncontrada = this.obterContaPorId(contaID);
 
     if (!contaEncontrada) {
       throw new Error('Conta não encontrada');
