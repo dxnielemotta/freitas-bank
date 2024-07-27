@@ -68,10 +68,13 @@ export class ClienteController {
     }
   }
 
-  @Post(':id/:tipoConta')
-  abrirConta(@Param('id') id: string, @Param('tipoConta') tipo: TipoConta) {
+  @Post(':clienteID/:tipoConta')
+  abrirConta(
+    @Param('clienteID') clienteID: string,
+    @Param('tipoConta') tipo: TipoConta,
+  ) {
     try {
-      this.clienteService.adicionarContaAoCliente(tipo, id);
+      this.clienteService.adicionarContaAoCliente(tipo, clienteID);
       return {
         statusCode: HttpStatus.CREATED,
         message: `Conta ${tipo} criada com sucesso`,
