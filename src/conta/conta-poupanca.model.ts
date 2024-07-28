@@ -1,5 +1,5 @@
 import { TipoConta } from 'src/enums/tipo-conta.enum';
-import { Conta } from './conta.model';
+import { Conta } from './conta.entity';
 
 export class ContaPoupanca extends Conta {
   private taxaJuros: number = 0.01;

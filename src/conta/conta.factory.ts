@@ -1,5 +1,5 @@
 import { TipoConta } from 'src/enums/tipo-conta.enum';
-import { Conta } from './conta.model';
+import { Conta } from './conta.entity';
 import { ContaCorrente } from './conta-corrente.model';
 import { ContaPoupanca } from './conta-poupanca.model';
 

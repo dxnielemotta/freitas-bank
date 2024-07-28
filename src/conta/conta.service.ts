@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 
-import { Conta } from './conta.model';
+import { Conta } from './conta.entity';
 import { ContaFactory } from './conta.factory';
 import { TipoConta } from 'src/enums/tipo-conta.enum';
 import { ClienteService } from 'src/cliente/cliente.service';

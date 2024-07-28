@@ -1,5 +1,5 @@
 import { TipoConta } from 'src/enums/tipo-conta.enum';
-import { Conta } from './conta.model';
+import { Conta } from './conta.entity';
 
 export class ContaCorrente extends Conta {
   private limiteChequeEspecial: number = 100;

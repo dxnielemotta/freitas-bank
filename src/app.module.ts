@@ -6,9 +6,9 @@ import { ContaModule } from './conta/conta.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-//mudar de model para entity
-import { Gerente } from './gerente/gerente.model';
+import { Gerente } from './gerente/gerente.entity';
 import { Cliente } from './cliente/cliente.entity';
+import { Conta } from './conta/conta.entity';
 
 @Module({
   imports: [
@@ -19,7 +19,7 @@ import { Cliente } from './cliente/cliente.entity';
       database: 'freitas-bank',
       username: 'postgres',
       password: 'postgres',
-      entities: [Cliente, Gerente],
+      entities: [Cliente, Gerente, Conta],
       synchronize: true,
     }),
     ClienteModule,
