@@ -1,5 +1,11 @@
 import { Cliente } from 'src/cliente/cliente.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('Gerentes')
 export class Gerente {
@@ -9,7 +15,9 @@ export class Gerente {
   @Column()
   public nomeCompleto: string;
 
-  @Column()
+  //rever parametros
+  @OneToMany(() => Cliente, (cliente) => cliente.gerenteID, { cascade: true })
+  @JoinColumn()
   public clientes: Cliente[] = [];
 
   constructor(nomeCompleto: string, clientes: Cliente[] = [], id?: string) {
