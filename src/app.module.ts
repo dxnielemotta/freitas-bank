@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
 
-import { ClienteModule } from './cliente/cliente.module';
-import { GerenteModule } from './gerente/gerente.module';
-import { ContaModule } from './conta/conta.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { DomainModule } from './domain/domain.module';
+import { ApplicationModule } from './application/application.module';
+import { InfrastructureModule } from './infrastructure/infrastructure.module';
+
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Gerente } from './gerente/gerente.entity';
-import { Cliente } from './cliente/cliente.entity';
-import { Conta } from './conta/conta.entity';
+import { Gerente } from './domain/entities/gerente.entity';
+import { Cliente } from './domain/entities/cliente.entity';
+import { Conta } from './domain/entities/conta.entity';
 
 @Module({
   imports: [
@@ -16,17 +15,17 @@ import { Conta } from './conta/conta.entity';
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      database: 'freitas-bank',
+      database: 'freitas_bank',
       username: 'postgres',
       password: 'postgres',
       entities: [Cliente, Gerente, Conta],
       synchronize: true,
     }),
-    ClienteModule,
-    GerenteModule,
-    ContaModule,
+    DomainModule,
+    ApplicationModule,
+    InfrastructureModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
