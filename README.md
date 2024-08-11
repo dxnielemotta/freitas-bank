@@ -13,28 +13,36 @@ Este projeto é um sistema bancário comunitário desenvolvido utilizando Nest.j
 ## Pré-requisitos
 
 - Node.js (v14+)
-- npm 
+- npm
 
 ## Instalação
 
 1. Clone o repositório:
- ```bash
-   git clone https://github.com/dxnielemotta/freitas-bank.git
- ````
+
+```bash
+  git clone https://github.com/dxnielemotta/freitas-bank.git
+```
+
 2. Entre no repositório:
+
 ```bash
    cd freitas-bank
- ````
+```
+
 3. Instale as dependências:
- ```bash
-   npm install
- ````
+
+```bash
+  npm install
+```
+
 4. Execute o projeto:
+
 ```bash
   npm run start:dev
 ```
 
 ## Testando no Insomnia
+
 1. Abra o Insomnia
 2. Importe a configuração:
    - Clique em Create
@@ -43,49 +51,40 @@ Este projeto é um sistema bancário comunitário desenvolvido utilizando Nest.j
    - Isso irá importar todas as rotas configuradas para que você possa começar a testar.
 
 ## Testes
-   ### Clientes
+
+### Clientes
 
 - **Listar Clientes:**
   - `GET /clientes`
-  
 - **Obter Cliente por ID:**
   - `GET /clientes/:id`
-  
 - **Cadastrar Cliente:**
   - `POST /clientes/cadastrar`
-  
 - **Criar Conta Corrente:**
-  - `POST /clientes/:clienteID/corrente`
-  
+  - `POST /clientes/:clienteId/corrente`
 - **Criar Conta Poupança:**
-  - `POST /clientes/:clienteID/poupanca`
-  
+  - `POST /clientes/:clienteId/poupanca`
 - **Mudar Tipo de Conta:**
   - `PUT /clientes/:id/mudar`
-  
 - **Fechar Conta:**
-  - `DELETE /clientes/:id/excluir/:contaID`
+  - `DELETE /clientes/:id/excluir/:contaId`
+
 ### Contas
 
 - **Criar Conta Corrente:**
-  - `POST /contas/:clienteID/corrente`
-  
+  - `POST /contas/:clienteId/corrente`
 - **Criar Conta Poupança:**
-  - `POST /contas/:clienteID/poupanca`
+  - `POST /contas/:clienteId/poupanca`
 
 ### Gerentes
 
 - **Listar Gerentes:**
   - `GET /gerentes`
-  
 - **Criar Gerente:**
   - `POST /gerentes`
-  
 - **Adicionar Cliente:**
   - `POST /gerentes/:id/clientes`
-  
 - **Mudar Tipo de Conta:**
-  - `PUT /gerentes/:id/mudar/:clienteID`
-  
+  - `PUT /gerentes/:id/mudar/:clienteId`
 - **Fechar Conta:**
-  - `DELETE /gerentes/:id/excluir/:clienteID/:contaID`
+  - `DELETE /gerentes/:id/excluir/:clienteId/:contaId`
