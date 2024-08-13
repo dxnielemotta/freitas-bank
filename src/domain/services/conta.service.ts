@@ -6,20 +6,25 @@ import { TipoPagamento } from '../enums/tipo-pagamento.enum';
 import { PagamentoFactory } from '../factories/pagamento.factory';
 import { IContaRepository } from '../interfaces/conta.repository.interface';
 import { Cliente } from '../entities/cliente.entity';
+import { IPagamentoRepository } from '../interfaces/pagamento.repository.interface';
 
 @Injectable()
 export class ContaService {
   private contas: Conta[] = [];
 
-  //usar uma interface para ContaRepository
   constructor(
     @Inject('IContaRepository')
     private readonly contaRepository: IContaRepository,
+    // @Inject('IClienteRepository')
+    // private readonly clienteRepository: IClienteRepository,
+    @Inject('IPagamentoRepository')
+    private readonly pagamentoRepository: IPagamentoRepository,
   ) {}
 
   async abrirConta(tipo: TipoConta, cliente: Cliente) {
     const conta = await this.contaRepository.cadastrarConta(tipo, cliente);
     this.contas.push(conta);
+    cliente.contas.push(conta);
     return conta;
   }
 
@@ -32,12 +37,16 @@ export class ContaService {
   }
 
   async listarContas() {
-    return this.contaRepository.listarContas();
+    return await this.contaRepository.listarContas();
   }
 
   async mudarTipoConta(contaId: string, novoTipo: TipoConta) {
     const conta = await this.obterConta(contaId);
+
+    console.log(conta);
     conta.tipo = novoTipo;
+    console.log(conta);
+    await this.contaRepository.mudarTipoConta(conta);
   }
 
   async fecharConta(contaId: string) {
@@ -52,9 +61,22 @@ export class ContaService {
     valor: number,
     tipoPagamento: TipoPagamento,
   ) {
-    const conta = await this.obterConta(contaId);
+    const conta = await this.contaRepository.buscarPorId(contaId);
 
-    const pagamento = PagamentoFactory.criarPagamento(tipoPagamento);
+    console.log(conta);
+
+    if (!conta) {
+      throw new Error('Conta não encontrada');
+    }
+
+    const pagamento = PagamentoFactory.criarPagamento(
+      tipoPagamento,
+      valor,
+      conta,
+    );
+
+    // console.log(pagamento)
     pagamento.pagar(valor, conta);
+    await this.pagamentoRepository.cadastrarPagamento(pagamento);
   }
 }

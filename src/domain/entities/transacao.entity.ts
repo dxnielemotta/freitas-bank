@@ -1,25 +1,35 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { TIpoTransacao } from '../enums/tipo-transacao.enum';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { TipoTransacao } from '../enums/tipo-transacao.enum';
 import { Conta } from './conta.entity';
 
-@Entity()
+@Entity('Transações')
 export class Transacao {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  tipoTransacao: TIpoTransacao;
+  tipoTransacao: TipoTransacao;
 
-  // @ManyToOne(() => Conta, (conta) => conta.transacoes)
-  // conta: Conta;
+  @Column()
+  valor: number;
+
+  @ManyToOne(() => Conta, (conta) => conta.transacoes)
+  @JoinColumn({ name: 'conta_id' })
+  conta: Conta;
 
   @Column()
   data: Date;
 
-  constructor(id: string, tipoTransacao: TIpoTransacao) {
-    tipoTransacao = this.tipoTransacao;
-    if (!id) {
-      this.id = id;
-    }
+  constructor(tipoTransacao: TipoTransacao, valor: number, conta: Conta) {
+    this.tipoTransacao = tipoTransacao;
+    this.valor = valor;
+    this.data = new Date();
+    this.conta = conta;
   }
 }

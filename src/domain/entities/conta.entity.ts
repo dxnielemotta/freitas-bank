@@ -11,12 +11,11 @@ import {
 } from 'typeorm';
 import { Cliente } from './cliente.entity';
 import { Pagamento } from './pagamento.entity';
+import { Transacao } from './transacao.entity';
 
 @Entity('Contas')
 export abstract class Conta implements ContaInterface {
   @PrimaryGeneratedColumn('uuid')
-  @ManyToOne(() => Cliente, (cliente) => cliente.contas)
-  @JoinColumn()
   public id: string;
 
   @Column()
@@ -25,19 +24,26 @@ export abstract class Conta implements ContaInterface {
   @Column()
   public tipo: TipoConta;
 
-  // @OneToMany(() => Pagamento, (pagamento) => pagamento)
-  // transacoes: Pagamento[];
   @ManyToOne(() => Cliente, (cliente) => cliente.contas)
+  @JoinColumn({ name: 'cliente_id' })
   public cliente: Cliente;
 
-  constructor(saldo: number, cliente: Cliente, tipo: TipoConta, id?: string) {
+  @OneToMany(() => Pagamento, (pagamento) => pagamento.conta, { cascade: true })
+  pagamentos: Pagamento[];
+
+  @OneToMany(() => Transacao, (transacao) => transacao.conta, { cascade: true })
+  transacoes: Transacao[];
+
+  constructor(
+    saldo: number,
+    cliente: Cliente,
+    tipo: TipoConta,
+    // pagamentos: Pagamento[],
+  ) {
     this.saldo = saldo;
     this.cliente = cliente;
     this.tipo = tipo;
-
-    if (!id) {
-      this.id = id;
-    }
+    // this.pagamentos = pagamentos;
   }
 
   depositar(valor: number): void {
@@ -45,11 +51,10 @@ export abstract class Conta implements ContaInterface {
   }
 
   sacar(valor: number): void {
-    this.verificarSaldoInsuficiente(valor);
+    // this.verificarSaldoInsuficiente(valor);
+    if (valor > this.saldo) {
+      throw new Error('Saldo insuficiente');
+    }
     this.saldo -= valor;
   }
-
-  abstract verificarSaldoInsuficiente(valor: number): void;
-
-  abstract transferir(destino: Conta, valor: number): void;
 }

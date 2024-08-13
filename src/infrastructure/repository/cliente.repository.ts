@@ -15,7 +15,7 @@ export class ClienteRepository implements IClienteRepository {
   async listarClientes(): Promise<Cliente[]> {
     // SELECT * FROM clientes
     return await this.clienteRepository.find({
-      relations: ['gerente', 'contas'],
+      relations: ['contas', 'gerente'],
     });
   }
 
@@ -23,7 +23,7 @@ export class ClienteRepository implements IClienteRepository {
     // SELECT * FROM clientes WHERE id = ?;
     return this.clienteRepository.findOne({
       where: { id },
-      relations: ['gerente', 'contas'],
+      relations: ['contas', 'gerente'],
     });
   }
 
@@ -51,9 +51,9 @@ export class ClienteRepository implements IClienteRepository {
     await this.clienteRepository.save(cliente);
   }
 
-  async listarContasDoCliente(clienteId: string): Promise<Conta[]> {
-    const cliente = await this.buscarPorId(clienteId);
-    const contasDoCliente = cliente.contas;
-    return contasDoCliente;
-  }
+  // async listarContasDoCliente(clienteId: string): Promise<Conta[]> {
+  //   const cliente = await this.buscarPorId(clienteId);
+  //   const contasDoCliente = cliente.contas;
+  //   return contasDoCliente;
+  // }
 }

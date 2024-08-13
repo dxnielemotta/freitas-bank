@@ -27,15 +27,25 @@ export class ClienteService {
   ) {}
 
   async cadastrarCliente(
-    nomeCompleto: string,
-    endereco: string,
-    telefone: string,
-    rendaSalarial: number,
-    gerente?: Gerente,
+    // nomeCompleto: string,
+    // endereco: string,
+    // telefone: string,
+    // rendaSalarial: number,
+    // gerente?: Gerente,
+    criarClienteDto: CriarClienteDto,
   ): Promise<Cliente> {
-    const gerenteEncontrado = await this.gerenteRepository.buscarPorId(
-      gerente.id,
-    );
+    const {
+      nomeCompleto,
+      endereco,
+      telefone,
+      rendaSalarial,
+      contas,
+      gerenteId,
+    } = criarClienteDto;
+
+    const gerenteEncontrado =
+      // ou gerenteService
+      await this.gerenteRepository.buscarPorId(gerenteId);
 
     if (!gerenteEncontrado) {
       throw new Error('Gerente não encontrado');
@@ -46,17 +56,14 @@ export class ClienteService {
       endereco,
       telefone,
       rendaSalarial,
-      gerente,
+      contas,
+      gerenteEncontrado,
     );
 
-    if (!gerente.clientes) {
-      gerente.clientes = [];
-    }
-
-    gerente.clientes.push(cliente);
+    // gerenteEncontrado.clientes.push(cliente);
 
     this.clientes.push(cliente);
-    await this.gerenteRepository.cadastrar(gerente);
+    await this.gerenteRepository.cadastrar(gerenteEncontrado);
     return await this.clienteRepository.cadastrarCliente(cliente);
   }
 
@@ -92,6 +99,28 @@ export class ClienteService {
     return;
   }
 
+  // async abrirConta(tipo: TipoConta, cliente: Cliente) {
+  //   const clienteEncontrado = await this.clienteRepository.buscarPorId(
+  //     cliente.id,
+  //   );
+
+  //   if (!clienteEncontrado) {
+  //     throw new Error('Cliente não encontrado');
+  //   }
+
+  //   if (!clienteEncontrado.contas) {
+  //     cliente.contas = [];
+  //   }
+
+  //   const conta = await this.contaRepository.cadastrarConta(
+  //     tipo,
+  //     clienteEncontrado,
+  //   );
+  //   cliente.contas.push(conta);
+  //   this.contas.push(conta);
+  //   return;
+  // }
+
   async mudarTipoConta(contaId: string, novoTipo: TipoConta) {
     this.contaService.mudarTipoConta(contaId, novoTipo);
   }
@@ -100,11 +129,11 @@ export class ClienteService {
     this.contaRepository.excluirConta(contaId);
   }
 
-  async listarContasDoCliente(clienteId: string): Promise<Conta[]> {
-    const contas =
-      await this.clienteRepository.listarContasDoCliente(clienteId);
-    return contas;
-  }
+  // async listarContasDoCliente(clienteId: string): Promise<Conta[]> {
+  //   const contas =
+  //     await this.clienteRepository.listarContasDoCliente(clienteId);
+  //   return contas;
+  // }
 
   async removerContaDoCliente(clienteId: string, contaId: string) {
     const cliente = await this.clienteRepository.buscarPorId(clienteId);
@@ -128,6 +157,6 @@ export class ClienteService {
     tipoPagamento: TipoPagamento,
   ) {
     //ver se tem como transportar para o contarepository
-    this.contaService.fazerPagamento(contaId, valor, tipoPagamento);
+    await this.contaService.fazerPagamento(contaId, valor, tipoPagamento);
   }
 }

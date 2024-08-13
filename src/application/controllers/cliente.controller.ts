@@ -26,13 +26,8 @@ export class ClienteController {
     criarClienteDto: CriarClienteDto,
   ) {
     try {
-      const cliente = await this.clienteService.cadastrarCliente(
-        criarClienteDto.nomeCompleto,
-        criarClienteDto.endereco,
-        criarClienteDto.telefone,
-        criarClienteDto.rendaSalarial,
-        criarClienteDto.gerente,
-      );
+      const cliente =
+        await this.clienteService.cadastrarCliente(criarClienteDto);
       return {
         statusCode: HttpStatus.CREATED,
         message: 'Cliente cadastrado com sucesso',
@@ -117,38 +112,38 @@ export class ClienteController {
     }
   }
 
-  @Get(':clienteId/contas')
-  listarContasDoCliente(@Param('clienteId') clienteId: string) {
-    try {
-      const cliente = this.clienteService.obterCliente(clienteId);
-      if (!cliente) {
-        throw new Error('Cliente não encontrado');
-      }
-      const contas = this.clienteService.listarContasDoCliente(clienteId);
-      return {
-        statusCode: HttpStatus.OK,
-        message: `Contas do cliente retornadas com sucesso`,
-        data: contas,
-      };
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
+  // @Get(':clienteId/contas')
+  // listarContasDoCliente(@Param('clienteId') clienteId: string) {
+  //   try {
+  //     const cliente = this.clienteService.obterCliente(clienteId);
+  //     if (!cliente) {
+  //       throw new Error('Cliente não encontrado');
+  //     }
+  //     const contas = this.clienteService.listarContasDoCliente(clienteId);
+  //     return {
+  //       statusCode: HttpStatus.OK,
+  //       message: `Contas do cliente retornadas com sucesso`,
+  //       data: contas,
+  //     };
+  //   } catch (error) {
+  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+  //   }
+  // }
 
   @Post(':clienteId/contas/:contaId')
-  fazerPagamento(
+  async fazerPagamento(
     @Param('clienteId') clienteId: string,
     @Param('contaId') contaId: string,
     @Body('valor') valor: number,
     @Body('tipoPagamento') tipoPagamento: TipoPagamento,
   ) {
     try {
-      const cliente = this.clienteService.obterCliente(clienteId);
+      const cliente = await this.clienteService.obterCliente(clienteId);
       if (!cliente) {
         throw new Error('Cliente não encontrado');
       }
 
-      const pagamento = this.clienteService.fazerPagamento(
+      const pagamento = await this.clienteService.fazerPagamento(
         contaId,
         valor,
         tipoPagamento,

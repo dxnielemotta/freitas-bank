@@ -1,7 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { TipoPagamento } from '../enums/tipo-pagamento.enum';
+import { Conta } from './conta.entity';
 
-@Entity()
+@Entity('Pagamentos')
 export class Pagamento {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -9,19 +10,28 @@ export class Pagamento {
   @Column()
   tipoPagamento: TipoPagamento;
 
-  // @Column()
-  // valor: number;
+  @Column()
+  valor: number;
 
-  // @Column()
-  // data: Date;
+  @Column()
+  data: Date;
 
-  // @ManyToOne(() => Conta, (conta) => conta.transacoes)
-  // conta: Conta;
+  @ManyToOne(() => Conta, (conta) => conta.pagamentos)
+  conta: Conta;
 
-  constructor(id: string, tipoPagamento: TipoPagamento) {
+  constructor(
+    tipoPagamento: TipoPagamento,
+    valor: number,
+    data: Date,
+    conta: Conta,
+  ) {
     this.tipoPagamento = tipoPagamento;
-    if (!id) {
-      this.id = id;
-    }
+    this.valor = valor;
+    this.data = data;
+    this.conta = conta;
+  }
+
+  pagar(valor: number, conta: Conta): void {
+    conta.sacar(valor);
   }
 }

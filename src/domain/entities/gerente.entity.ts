@@ -17,19 +17,7 @@ export class Gerente {
   @Column()
   public nomeCompleto: string;
 
-  @OneToMany(() => Cliente, (cliente) => cliente.gerente)
-  @JoinColumn()
-  clientes?: Cliente[];
-
-  constructor(nomeCompleto: string, id?: string, clientes?: Cliente[]) {
+  constructor(nomeCompleto: string, id?: string) {
     this.nomeCompleto = nomeCompleto;
-
-    if (!id) {
-      this.id = id;
-    }
-
-    if (!clientes) {
-      this.clientes = clientes;
-    }
   }
 }
