@@ -36,6 +36,7 @@ export class ContaRepository implements IContaRepository {
   }
 
   async excluirConta(contaId: string): Promise<boolean> {
+    // DELETE FROM conta where id
     const result = await this.contaRepository.delete(contaId);
     return result.affected > 0;
   }

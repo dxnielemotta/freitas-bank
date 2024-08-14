@@ -36,16 +36,10 @@ export abstract class Conta implements ContaInterface {
   @OneToMany(() => Transacao, (transacao) => transacao.conta)
   transacoes: Transacao[];
 
-  constructor(
-    saldo: number,
-    cliente: Cliente,
-    tipo: TipoConta,
-    // pagamentos: Pagamento[],
-  ) {
+  constructor(saldo: number, cliente: Cliente, tipo: TipoConta) {
     this.saldo = saldo;
     this.cliente = cliente;
     this.tipo = tipo;
-    // this.pagamentos = pagamentos;
   }
 
   depositar(valor: number): void {

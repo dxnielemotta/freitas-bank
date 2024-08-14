@@ -3,8 +3,6 @@ import { Gerente } from '../entities/gerente.entity';
 import { TipoConta } from '../enums/tipo-conta.enum';
 import { ContaService } from './conta.service';
 import { Cliente } from '../entities/cliente.entity';
-import { GerenteRepository } from 'src/infrastructure/repository/gerente.repository';
-import { ClienteRepository } from 'src/infrastructure/repository/cliente.repository';
 import { IGerenteRepository } from '../interfaces/gerente.repository.interface';
 import { IClienteRepository } from '../interfaces/cliente.repository.interface';
 

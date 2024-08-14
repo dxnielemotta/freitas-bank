@@ -142,7 +142,6 @@ export class ContaService {
       throw new Error('Conta de destino não encontrada');
     }
 
-    // contaOrigem.transferir(contaDestino, valor);
     if (valor > contaOrigem.saldo) {
       throw new Error('Saldo insuficiente');
     }

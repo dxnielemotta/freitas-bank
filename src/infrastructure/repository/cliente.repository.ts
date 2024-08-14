@@ -33,6 +33,7 @@ export class ClienteRepository implements IClienteRepository {
   }
 
   async excluirCliente(id: string): Promise<boolean> {
+    //DELETE FROM clientes WHERE id
     const result = await this.clienteRepository.delete(id);
     return result.affected > 0;
   }
@@ -50,10 +51,4 @@ export class ClienteRepository implements IClienteRepository {
 
     await this.clienteRepository.save(cliente);
   }
-
-  // async listarContasDoCliente(clienteId: string): Promise<Conta[]> {
-  //   const cliente = await this.buscarPorId(clienteId);
-  //   const contasDoCliente = cliente.contas;
-  //   return contasDoCliente;
-  // }
 }

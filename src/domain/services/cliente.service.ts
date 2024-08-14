@@ -26,14 +26,7 @@ export class ClienteService {
     private contaService: ContaService,
   ) {}
 
-  async cadastrarCliente(
-    // nomeCompleto: string,
-    // endereco: string,
-    // telefone: string,
-    // rendaSalarial: number,
-    // gerente?: Gerente,
-    criarClienteDto: CriarClienteDto,
-  ): Promise<Cliente> {
+  async cadastrarCliente(criarClienteDto: CriarClienteDto): Promise<Cliente> {
     const {
       nomeCompleto,
       endereco,
@@ -44,7 +37,6 @@ export class ClienteService {
     } = criarClienteDto;
 
     const gerenteEncontrado =
-      // ou gerenteService
       await this.gerenteRepository.buscarPorId(gerenteId);
 
     if (!gerenteEncontrado) {
@@ -59,8 +51,6 @@ export class ClienteService {
       contas,
       gerenteEncontrado,
     );
-
-    // gerenteEncontrado.clientes.push(cliente);
 
     this.clientes.push(cliente);
     await this.gerenteRepository.cadastrar(gerenteEncontrado);

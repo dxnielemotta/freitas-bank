@@ -1,13 +1,4 @@
-import { CriarClienteDto } from 'src/application/dtos/cliente.dto';
-import { Cliente } from './cliente.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('Gerentes')
 export class Gerente {

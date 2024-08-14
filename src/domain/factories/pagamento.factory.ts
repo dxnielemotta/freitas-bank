@@ -1,6 +1,5 @@
 import { TipoPagamento } from '../enums/tipo-pagamento.enum';
 
-import { PagamentoInterface } from '../interfaces/pagamento.interface';
 import { Conta } from '../entities/conta.entity';
 import { Pagamento } from '../entities/pagamento.entity';
 

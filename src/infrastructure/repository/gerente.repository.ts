@@ -29,6 +29,7 @@ export class GerenteRepository implements IGerenteRepository {
   }
 
   async excluir(id: string): Promise<boolean> {
+    // DELETE FROM gerentes WHERE id
     const result = await this.gerenteRepository.delete(id);
     return result.affected > 0;
   }
