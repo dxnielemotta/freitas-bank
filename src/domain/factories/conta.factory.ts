@@ -7,8 +7,8 @@ import { Cliente } from '../entities/cliente.entity';
 export class ContaFactory {
   static criarConta(tipo: TipoConta, cliente: Cliente): Conta {
     const tiposConta = {
-      [TipoConta.CORRENTE]: new ContaCorrente(0, cliente, []),
-      [TipoConta.POUPANCA]: new ContaPoupanca(0, cliente, []),
+      [TipoConta.CORRENTE]: new ContaCorrente(0, cliente),
+      [TipoConta.POUPANCA]: new ContaPoupanca(0, cliente),
     };
 
     const conta = tiposConta[tipo];

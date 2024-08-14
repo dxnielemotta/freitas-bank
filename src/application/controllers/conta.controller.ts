@@ -64,4 +64,71 @@ export class ContaController {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
+  @Post(':contaId/depositar')
+  async depositar(
+    @Param('contaId') contaId: string,
+    @Body('valor') valor: number,
+  ) {
+    try {
+      const deposito = await this.contaService.depositar(contaId, valor);
+      return {
+        statusCode: HttpStatus.CREATED,
+        message: `Depósito no valor de ${valor} realizado com sucesso!`,
+        data: deposito,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post(':contaId/sacar')
+  async sacar(@Param('contaId') contaId: string, @Body('valor') valor: number) {
+    try {
+      const saque = await this.contaService.sacar(contaId, valor);
+      return {
+        statusCode: HttpStatus.CREATED,
+        message: `Saque no valor de ${valor} realizado com sucesso!`,
+        data: saque,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post(':contaId/transferir/:destinoId')
+  async transferir(
+    @Param('contaId') contaId: string,
+    @Body('valor') valor: number,
+    @Param('destinoId') destinoId: string,
+  ) {
+    try {
+      const transferencia = await this.contaService.transferir(
+        contaId,
+        valor,
+        destinoId,
+      );
+      return {
+        statusCode: HttpStatus.CREATED,
+        message: `Transferência no valor de ${valor} realizado com sucesso para a conta de id ${destinoId}!`,
+        data: transferencia,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get(':contaId/extrato')
+  async obterExtrato(@Param('contaId') contaId: string) {
+    try {
+      const extrato = await this.contaService.obterExtrato(contaId);
+      return {
+        statusCode: HttpStatus.CREATED,
+        message: `Extrato:`,
+        data: extrato,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 }

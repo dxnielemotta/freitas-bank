@@ -10,6 +10,11 @@ export class ContaPoupanca extends Conta {
     super(saldo, cliente, TipoConta.POUPANCA);
   }
 
+  sacar(valor: number): void {
+    this.verificarSaldoInsuficiente(valor);
+    this.saldo -= valor;
+  }
+
   transferir(destino: Conta, valor: number): void {
     this.verificarSaldoInsuficiente(valor);
     this.saldo -= valor;

@@ -19,7 +19,7 @@ export class Transacao {
   @Column()
   valor: number;
 
-  @ManyToOne(() => Conta, (conta) => conta.transacoes)
+  @ManyToOne(() => Conta, (conta) => conta.transacoes, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'conta_id' })
   conta: Conta;
 

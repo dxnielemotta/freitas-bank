@@ -17,10 +17,19 @@ export class ContaCorrente extends Conta {
     }
   }
 
+  sacar(valor: number): void {
+    this.verificarValorASerSacado(valor);
+    if (valor <= this.saldo) {
+      this.saldo -= valor;
+    } else {
+      this.limiteChequeEspecial -= valor;
+    }
+  }
+
   transferir(destino: Conta, valor: number): void {
     this.verificarValorASerSacado(valor);
 
-    if (valor < this.saldo) {
+    if (valor <= this.saldo) {
       this.saldo -= valor;
       destino.saldo += valor;
     } else {

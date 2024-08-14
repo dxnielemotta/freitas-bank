@@ -57,7 +57,15 @@ export class GerenteService {
   }
 
   async mudarTipoConta(contaId: string, novoTipo: TipoConta) {
-    this.contaService.mudarTipoConta(contaId, novoTipo);
+    const conta = await this.contaService.obterConta(contaId);
+
+    if (conta.cliente.rendaSalarial < 600) {
+      throw new Error(
+        'Cliente não possui os requisitos para mudar o tipo da conta.',
+      );
+    }
+
+    await this.contaService.mudarTipoConta(contaId, novoTipo);
   }
 
   async fecharConta(contaId: string) {

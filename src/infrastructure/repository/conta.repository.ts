@@ -40,7 +40,7 @@ export class ContaRepository implements IContaRepository {
     return result.affected > 0;
   }
 
-  async mudarTipoConta(conta: Conta): Promise<Conta> {
+  async atualizarConta(conta: Conta): Promise<Conta> {
     return await this.contaRepository.save(conta);
   }
 }

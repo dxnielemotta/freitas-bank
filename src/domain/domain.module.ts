@@ -8,11 +8,12 @@ import { Conta } from './entities/conta.entity';
 import { Cliente } from './entities/cliente.entity';
 import { Gerente } from './entities/gerente.entity';
 import { Pagamento } from './entities/pagamento.entity';
+import { Transacao } from './entities/transacao.entity';
 
 @Module({
   imports: [
     InfrastructureModule,
-    TypeOrmModule.forFeature([Conta, Cliente, Gerente, Pagamento]),
+    TypeOrmModule.forFeature([Conta, Cliente, Gerente, Pagamento, Transacao]),
   ],
   providers: [ContaService, ClienteService, GerenteService],
   exports: [ContaService, ClienteService, GerenteService],

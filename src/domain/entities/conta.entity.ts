@@ -24,14 +24,16 @@ export abstract class Conta implements ContaInterface {
   @Column()
   public tipo: TipoConta;
 
-  @ManyToOne(() => Cliente, (cliente) => cliente.contas)
+  @ManyToOne(() => Cliente, (cliente) => cliente.contas, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'cliente_id' })
   public cliente: Cliente;
 
-  @OneToMany(() => Pagamento, (pagamento) => pagamento.conta, { cascade: true })
+  @OneToMany(() => Pagamento, (pagamento) => pagamento.conta)
   pagamentos: Pagamento[];
 
-  @OneToMany(() => Transacao, (transacao) => transacao.conta, { cascade: true })
+  @OneToMany(() => Transacao, (transacao) => transacao.conta)
   transacoes: Transacao[];
 
   constructor(
@@ -50,11 +52,7 @@ export abstract class Conta implements ContaInterface {
     this.saldo += valor;
   }
 
-  sacar(valor: number): void {
-    // this.verificarSaldoInsuficiente(valor);
-    if (valor > this.saldo) {
-      throw new Error('Saldo insuficiente');
-    }
-    this.saldo -= valor;
-  }
+  abstract sacar(valor: number): void;
+
+  abstract transferir(conta: Conta, valor: number): void;
 }

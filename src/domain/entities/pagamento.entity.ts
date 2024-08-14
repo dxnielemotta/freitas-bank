@@ -16,7 +16,7 @@ export class Pagamento {
   @Column()
   data: Date;
 
-  @ManyToOne(() => Conta, (conta) => conta.pagamentos)
+  @ManyToOne(() => Conta, (conta) => conta.pagamentos, { onDelete: 'CASCADE' })
   conta: Conta;
 
   constructor(
@@ -32,6 +32,12 @@ export class Pagamento {
   }
 
   pagar(valor: number, conta: Conta): void {
-    conta.sacar(valor);
+    //adicionar verificacao se é corrente ou poupanca
+
+    if (valor > conta.saldo) {
+      throw new Error('Saldo Insuficiente');
+    }
+
+    conta.saldo -= valor;
   }
 }

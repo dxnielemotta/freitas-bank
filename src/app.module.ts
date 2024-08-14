@@ -10,6 +10,7 @@ import { Cliente } from './domain/entities/cliente.entity';
 import { Conta } from './domain/entities/conta.entity';
 import { ConfigModule } from '@nestjs/config';
 import { Pagamento } from './domain/entities/pagamento.entity';
+import { Transacao } from './domain/entities/transacao.entity';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { Pagamento } from './domain/entities/pagamento.entity';
       database: process.env.DB_NAME,
       username: process.env.DB_USER,
       password: process.env.DB_PASS,
-      entities: [Cliente, Gerente, Conta, Pagamento],
+      entities: [Cliente, Gerente, Conta, Pagamento, Transacao],
       synchronize: true,
     }),
     DomainModule,

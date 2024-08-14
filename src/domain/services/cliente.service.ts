@@ -99,41 +99,13 @@ export class ClienteService {
     return;
   }
 
-  // async abrirConta(tipo: TipoConta, cliente: Cliente) {
-  //   const clienteEncontrado = await this.clienteRepository.buscarPorId(
-  //     cliente.id,
-  //   );
-
-  //   if (!clienteEncontrado) {
-  //     throw new Error('Cliente não encontrado');
-  //   }
-
-  //   if (!clienteEncontrado.contas) {
-  //     cliente.contas = [];
-  //   }
-
-  //   const conta = await this.contaRepository.cadastrarConta(
-  //     tipo,
-  //     clienteEncontrado,
-  //   );
-  //   cliente.contas.push(conta);
-  //   this.contas.push(conta);
-  //   return;
-  // }
-
   async mudarTipoConta(contaId: string, novoTipo: TipoConta) {
-    this.contaService.mudarTipoConta(contaId, novoTipo);
+    await this.contaService.mudarTipoConta(contaId, novoTipo);
   }
 
   async fecharConta(contaId: string) {
     this.contaRepository.excluirConta(contaId);
   }
-
-  // async listarContasDoCliente(clienteId: string): Promise<Conta[]> {
-  //   const contas =
-  //     await this.clienteRepository.listarContasDoCliente(clienteId);
-  //   return contas;
-  // }
 
   async removerContaDoCliente(clienteId: string, contaId: string) {
     const cliente = await this.clienteRepository.buscarPorId(clienteId);
@@ -156,7 +128,6 @@ export class ClienteService {
     valor: number,
     tipoPagamento: TipoPagamento,
   ) {
-    //ver se tem como transportar para o contarepository
     await this.contaService.fazerPagamento(contaId, valor, tipoPagamento);
   }
 }
