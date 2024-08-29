@@ -7,4 +7,5 @@ export interface IContaRepository {
   buscarPorId(id: string): Promise<Conta | null>;
   cadastrarConta(tipo: TipoConta, cliente: Cliente): Promise<Conta>;
   excluirConta(contaId: string): Promise<boolean>;
+  atualizarConta(conta: Conta): Promise<Conta>;
 }

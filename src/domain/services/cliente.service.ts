@@ -26,16 +26,18 @@ export class ClienteService {
     private contaService: ContaService,
   ) {}
 
-  async cadastrarCliente(
-    nomeCompleto: string,
-    endereco: string,
-    telefone: string,
-    rendaSalarial: number,
-    gerente?: Gerente,
-  ): Promise<Cliente> {
-    const gerenteEncontrado = await this.gerenteRepository.buscarPorId(
-      gerente.id,
-    );
+  async cadastrarCliente(criarClienteDto: CriarClienteDto): Promise<Cliente> {
+    const {
+      nomeCompleto,
+      endereco,
+      telefone,
+      rendaSalarial,
+      contas,
+      gerenteId,
+    } = criarClienteDto;
+
+    const gerenteEncontrado =
+      await this.gerenteRepository.buscarPorId(gerenteId);
 
     if (!gerenteEncontrado) {
       throw new Error('Gerente não encontrado');
@@ -46,17 +48,12 @@ export class ClienteService {
       endereco,
       telefone,
       rendaSalarial,
-      gerente,
+      contas,
+      gerenteEncontrado,
     );
 
-    if (!gerente.clientes) {
-      gerente.clientes = [];
-    }
-
-    gerente.clientes.push(cliente);
-
     this.clientes.push(cliente);
-    await this.gerenteRepository.cadastrar(gerente);
+    await this.gerenteRepository.cadastrar(gerenteEncontrado);
     return await this.clienteRepository.cadastrarCliente(cliente);
   }
 
@@ -93,17 +90,11 @@ export class ClienteService {
   }
 
   async mudarTipoConta(contaId: string, novoTipo: TipoConta) {
-    this.contaService.mudarTipoConta(contaId, novoTipo);
+    await this.contaService.mudarTipoConta(contaId, novoTipo);
   }
 
   async fecharConta(contaId: string) {
     this.contaRepository.excluirConta(contaId);
-  }
-
-  async listarContasDoCliente(clienteId: string): Promise<Conta[]> {
-    const contas =
-      await this.clienteRepository.listarContasDoCliente(clienteId);
-    return contas;
   }
 
   async removerContaDoCliente(clienteId: string, contaId: string) {
@@ -127,7 +118,6 @@ export class ClienteService {
     valor: number,
     tipoPagamento: TipoPagamento,
   ) {
-    //ver se tem como transportar para o contarepository
-    this.contaService.fazerPagamento(contaId, valor, tipoPagamento);
+    await this.contaService.fazerPagamento(contaId, valor, tipoPagamento);
   }
 }

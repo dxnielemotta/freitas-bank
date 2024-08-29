@@ -9,18 +9,32 @@ export class ContaCorrente extends Conta {
     super(saldo, cliente, TipoConta.CORRENTE);
   }
 
-  verificarSaldoInsuficiente(valor: number): void {
-    if (valor > this.saldo + this.limiteChequeEspecial) {
+  private saldoTotal = this.saldo + this.limiteChequeEspecial;
+
+  verificarValorASerSacado(valor: number): void {
+    if (valor > this.saldoTotal) {
       throw new Error('Saldo insuficiente');
     }
   }
 
+  sacar(valor: number): void {
+    this.verificarValorASerSacado(valor);
+    if (valor <= this.saldo) {
+      this.saldo -= valor;
+    } else {
+      this.limiteChequeEspecial -= valor;
+    }
+  }
+
   transferir(destino: Conta, valor: number): void {
-    let saldoTotal = this.saldo + this.limiteChequeEspecial;
+    this.verificarValorASerSacado(valor);
 
-    this.verificarSaldoInsuficiente(valor);
-
-    saldoTotal -= valor;
-    destino.saldo += valor;
+    if (valor <= this.saldo) {
+      this.saldo -= valor;
+      destino.saldo += valor;
+    } else {
+      this.limiteChequeEspecial -= valor;
+      destino.saldo += valor;
+    }
   }
 }

@@ -13,14 +13,13 @@ export class GerenteRepository implements IGerenteRepository {
 
   async listarGerentes(): Promise<Gerente[]> {
     // SELECT * FROM gerentes
-    return await this.gerenteRepository.find({ relations: ['clientes'] });
+    return await this.gerenteRepository.find();
   }
 
   async buscarPorId(id: string): Promise<Gerente | null> {
     // SELECT * FROM gerentes WHERE id = ?;
     return await this.gerenteRepository.findOne({
       where: { id },
-      relations: ['clientes'],
     });
   }
 
@@ -30,6 +29,7 @@ export class GerenteRepository implements IGerenteRepository {
   }
 
   async excluir(id: string): Promise<boolean> {
+    // DELETE FROM gerentes WHERE id
     const result = await this.gerenteRepository.delete(id);
     return result.affected > 0;
   }

@@ -3,8 +3,6 @@ import { Gerente } from '../entities/gerente.entity';
 import { TipoConta } from '../enums/tipo-conta.enum';
 import { ContaService } from './conta.service';
 import { Cliente } from '../entities/cliente.entity';
-import { GerenteRepository } from 'src/infrastructure/repository/gerente.repository';
-import { ClienteRepository } from 'src/infrastructure/repository/cliente.repository';
 import { IGerenteRepository } from '../interfaces/gerente.repository.interface';
 import { IClienteRepository } from '../interfaces/cliente.repository.interface';
 
@@ -57,7 +55,15 @@ export class GerenteService {
   }
 
   async mudarTipoConta(contaId: string, novoTipo: TipoConta) {
-    this.contaService.mudarTipoConta(contaId, novoTipo);
+    const conta = await this.contaService.obterConta(contaId);
+
+    if (conta.cliente.rendaSalarial < 600) {
+      throw new Error(
+        'Cliente não possui os requisitos para mudar o tipo da conta.',
+      );
+    }
+
+    await this.contaService.mudarTipoConta(contaId, novoTipo);
   }
 
   async fecharConta(contaId: string) {

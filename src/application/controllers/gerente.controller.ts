@@ -73,7 +73,6 @@ export class GerenteController {
     @Param('tipo') tipo: TipoConta,
   ) {
     try {
-      // console.log(`Tipo de conta recebido: ${tipo}`);
       await this.gerenteService.obterGerente(gerenteId);
       const cliente = await this.clienteService.obterCliente(clienteId);
 
@@ -93,23 +92,23 @@ export class GerenteController {
   }
 
   @Put(':gerenteId/mudarconta/:clienteId')
-  mudarTipoConta(
+  async mudarTipoConta(
     @Param('gerenteId') gerenteId: string,
     @Param('clienteId') clienteId: string,
     @Body() mudarContaDto: MudarContaDto,
   ) {
     try {
-      const gerente = this.gerenteService.obterGerente(gerenteId);
+      const gerente = await this.gerenteService.obterGerente(gerenteId);
       if (!gerente) {
         throw new Error('Gerente não encontrado');
       }
 
-      const cliente = this.clienteService.obterCliente(clienteId);
+      const cliente = await this.clienteService.obterCliente(clienteId);
       if (!cliente) {
         throw new Error('Cliente não encontrado');
       }
 
-      this.gerenteService.mudarTipoConta(
+      await this.gerenteService.mudarTipoConta(
         mudarContaDto.contaId,
         mudarContaDto.novoTipo,
       );

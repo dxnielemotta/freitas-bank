@@ -1,23 +1,24 @@
-import { Gerente } from 'src/domain/entities/gerente.entity';
+import { Conta } from 'src/domain/entities/conta.entity';
 
 export class CriarClienteDto {
   nomeCompleto: string;
   endereco: string;
   telefone: string;
   rendaSalarial: number;
-  gerente: Gerente;
+  contas: Conta[];
+  gerenteId: string;
 
-  // constructor(
-  //   nomeCompleto: string,
-  //   endereco: string,
-  //   telefone: string,
-  //   rendaSalarial: number,
-  //   gerenteId: string,
-  // ) {
-  //   this.nomeCompleto = nomeCompleto;
-  //   this.endereco = endereco;
-  //   this.telefone = telefone;
-  //   this.rendaSalarial = rendaSalarial;
-  //   this.gerenteId = gerenteId;
-  // }
+  constructor(
+    nomeCompleto: string,
+    endereco: string,
+    telefone: string,
+    contas: Conta[],
+    gerenteId: string,
+  ) {
+    this.nomeCompleto = nomeCompleto;
+    this.endereco = endereco;
+    this.telefone = telefone;
+    this.contas = contas;
+    this.gerenteId = gerenteId;
+  }
 }

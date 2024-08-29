@@ -26,35 +26,27 @@ export class Cliente {
   @Column()
   public rendaSalarial: number;
 
-  //rever parametros
   @OneToMany(() => Conta, (conta) => conta.cliente, { cascade: true })
   @JoinColumn()
   public contas: Conta[];
 
-  // @ManyToOne(() => Gerente, (gerente) => gerente.id, {
-  //   nullable: true,
-  // })
-  // @JoinColumn({ name: 'gerente_id' })
-  // public gerenteId: string;
-  @ManyToOne(() => Gerente, (gerente) => gerente.clientes)
-  public gerente: Gerente;
+  @ManyToOne(() => Gerente, (gerente) => gerente.id)
+  @JoinColumn({ name: 'gerente_id' })
+  public gerente?: Gerente;
 
   constructor(
     nomeCompleto: string,
     endereco: string,
     telefone: string,
     rendaSalarial: number,
+    contas: Conta[],
     gerente: Gerente,
-    id?: string,
   ) {
     this.nomeCompleto = nomeCompleto;
     this.endereco = endereco;
     this.telefone = telefone;
     this.rendaSalarial = rendaSalarial;
+    this.contas = contas;
     this.gerente = gerente;
-
-    if (!id) {
-      this.id = id;
-    }
   }
 }

@@ -16,13 +16,16 @@ export class ContaRepository implements IContaRepository {
 
   async listarContas(): Promise<Conta[]> {
     // SELECT * FROM contas
-    return await this.contaRepository.find();
+    return await this.contaRepository.find({
+      relations: ['cliente', 'pagamentos'],
+    });
   }
 
   async buscarPorId(id: string): Promise<Conta | null> {
-    // SELECT * FROM gerentes WHERE id = ?;
-    return this.contaRepository.findOne({
+    // SELECT * FROM contas WHERE id = ?;
+    return await this.contaRepository.findOne({
       where: { id },
+      relations: ['cliente', 'pagamentos'],
     });
   }
 
@@ -33,7 +36,12 @@ export class ContaRepository implements IContaRepository {
   }
 
   async excluirConta(contaId: string): Promise<boolean> {
+    // DELETE FROM conta where id
     const result = await this.contaRepository.delete(contaId);
     return result.affected > 0;
+  }
+
+  async atualizarConta(conta: Conta): Promise<Conta> {
+    return await this.contaRepository.save(conta);
   }
 }

@@ -1,20 +1,12 @@
 import { TipoPagamento } from '../enums/tipo-pagamento.enum';
-import { PagamentoBoleto } from '../models/pagamento-boleto.model';
-import { PagamentoPIX } from '../models/pagamento-pix.model';
-import { PagamentoInterface } from '../interfaces/pagamento.interface';
+
+import { Conta } from '../entities/conta.entity';
+import { Pagamento } from '../entities/pagamento.entity';
 
 export class PagamentoFactory {
-  static criarPagamento(tipo: TipoPagamento): PagamentoInterface {
-    const tiposPagamento = {
-      [TipoPagamento.PIX]: new PagamentoPIX(),
-      [TipoPagamento.BOLETO]: new PagamentoBoleto(),
-    };
-    const pagamento = tiposPagamento[tipo];
-
-    if (!pagamento) {
-      throw new Error('Tipo de pagamento inválido');
-    }
-
+  static criarPagamento(tipo: TipoPagamento, valor: number, conta: Conta) {
+    const data = new Date();
+    const pagamento = new Pagamento(tipo, valor, data, conta);
     return pagamento;
   }
 }

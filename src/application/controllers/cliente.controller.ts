@@ -26,13 +26,8 @@ export class ClienteController {
     criarClienteDto: CriarClienteDto,
   ) {
     try {
-      const cliente = await this.clienteService.cadastrarCliente(
-        criarClienteDto.nomeCompleto,
-        criarClienteDto.endereco,
-        criarClienteDto.telefone,
-        criarClienteDto.rendaSalarial,
-        criarClienteDto.gerente,
-      );
+      const cliente =
+        await this.clienteService.cadastrarCliente(criarClienteDto);
       return {
         statusCode: HttpStatus.CREATED,
         message: 'Cliente cadastrado com sucesso',
@@ -89,12 +84,12 @@ export class ClienteController {
   }
 
   @Put('mudarconta/:contaId')
-  mudarTipoConta(
+  async mudarTipoConta(
     @Param('contaId') contaId: string,
     @Body() mudarContaDto: MudarContaDto,
   ) {
     try {
-      this.clienteService.mudarTipoConta(contaId, mudarContaDto.novoTipo);
+      await this.clienteService.mudarTipoConta(contaId, mudarContaDto.novoTipo);
       return {
         statusCode: HttpStatus.NO_CONTENT,
         message: `Tipo da conta alterado com sucesso`,
@@ -105,9 +100,9 @@ export class ClienteController {
   }
 
   @Delete('excluir/:contaId')
-  fecharConta(@Param('contaId') contaId: string) {
+  async fecharConta(@Param('contaId') contaId: string) {
     try {
-      this.clienteService.fecharConta(contaId);
+      await this.clienteService.fecharConta(contaId);
       return {
         statusCode: HttpStatus.NO_CONTENT,
         message: `Conta fechada com sucesso`,
@@ -117,38 +112,17 @@ export class ClienteController {
     }
   }
 
-  @Get(':clienteId/contas')
-  listarContasDoCliente(@Param('clienteId') clienteId: string) {
-    try {
-      const cliente = this.clienteService.obterCliente(clienteId);
-      if (!cliente) {
-        throw new Error('Cliente não encontrado');
-      }
-      const contas = this.clienteService.listarContasDoCliente(clienteId);
-      return {
-        statusCode: HttpStatus.OK,
-        message: `Contas do cliente retornadas com sucesso`,
-        data: contas,
-      };
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
-
   @Post(':clienteId/contas/:contaId')
-  fazerPagamento(
+  async fazerPagamento(
     @Param('clienteId') clienteId: string,
     @Param('contaId') contaId: string,
     @Body('valor') valor: number,
     @Body('tipoPagamento') tipoPagamento: TipoPagamento,
   ) {
     try {
-      const cliente = this.clienteService.obterCliente(clienteId);
-      if (!cliente) {
-        throw new Error('Cliente não encontrado');
-      }
+      await this.clienteService.obterCliente(clienteId);
 
-      const pagamento = this.clienteService.fazerPagamento(
+      const pagamento = await this.clienteService.fazerPagamento(
         contaId,
         valor,
         tipoPagamento,
